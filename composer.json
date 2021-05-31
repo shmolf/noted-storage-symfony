@@ -67,8 +67,7 @@
         "test": "phpunit",
         "all-checks": [
             "@lint",
-            "@analysis",
-            "test"
+            "@analysis"
         ]
     },
     "conflict": {
