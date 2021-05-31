@@ -42,7 +42,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 12
-      - run: npx yarn install --check-files
+      - run: npx yarn install --check-cache
 
   release:
     needs: prepare-release
