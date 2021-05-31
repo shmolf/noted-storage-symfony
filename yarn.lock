@@ -649,6 +649,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@shmolf/noted-storage-symfony@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@shmolf/noted-storage-symfony@workspace:."
+  dependencies:
+    "@commitlint/cli": ^12.1.4
+    "@commitlint/config-conventional": ^12.1.4
+    "@semantic-release/changelog": ^5.0.1
+    "@semantic-release/git": ^9.0.0
+    husky: ^6.0.0
+    semantic-release: ^17.4.3
+  languageName: unknown
+  linkType: soft
+
 "@tootallnate/once@npm:1":
   version: 1.1.2
   resolution: "@tootallnate/once@npm:1.1.2"
@@ -3228,19 +3241,6 @@ __metadata:
   checksum: 63fe38bbc1c1b41fcc4ba9f54411755ce75aaeb25624d3c95f6d84501ea7a0e4ddd79fbcfcf9e497de7952e3c4856cba8719e9417cfbdd8e082aea5c900f3de4
   languageName: node
   linkType: hard
-
-"noted-storage-symfony@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "noted-storage-symfony@workspace:."
-  dependencies:
-    "@commitlint/cli": ^12.1.4
-    "@commitlint/config-conventional": ^12.1.4
-    "@semantic-release/changelog": ^5.0.1
-    "@semantic-release/git": ^9.0.0
-    husky: ^6.0.0
-    semantic-release: ^17.4.3
-  languageName: unknown
-  linkType: soft
 
 "npm-audit-report@npm:^2.1.5":
   version: 2.1.5

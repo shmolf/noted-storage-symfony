@@ -19,14 +19,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     ],
     "dependencyTreeRoots": [
       {
-        "name": "noted-storage-symfony",
+        "name": "@shmolf/noted-storage-symfony",
         "reference": "workspace:."
       }
     ],
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.yarn\\/sdks(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)|$))$)",
     "fallbackExclusionList": [
-      ["noted-storage-symfony", ["workspace:."]]
+      ["@shmolf/noted-storage-symfony", ["workspace:."]]
     ],
     "fallbackPool": [
     ],
@@ -39,8 +39,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@commitlint/cli", "npm:12.1.4"],
             ["@commitlint/config-conventional", "npm:12.1.4"],
-            ["@semantic-release/changelog", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:5.0.1"],
-            ["@semantic-release/git", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:9.0.0"],
+            ["@semantic-release/changelog", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1"],
+            ["@semantic-release/git", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0"],
             ["husky", "npm:6.0.0"],
             ["semantic-release", "npm:17.4.3"]
           ],
@@ -658,10 +658,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:5.0.1", {
-          "packageLocation": "./.yarn/$$virtual/@semantic-release-changelog-virtual-d6f9bb39e3/0/cache/@semantic-release-changelog-npm-5.0.1-6a4fde8bb8-9f4620e6f6.zip/node_modules/@semantic-release/changelog/",
+        ["virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1", {
+          "packageLocation": "./.yarn/$$virtual/@semantic-release-changelog-virtual-39d14f900f/0/cache/@semantic-release-changelog-npm-5.0.1-6a4fde8bb8-9f4620e6f6.zip/node_modules/@semantic-release/changelog/",
           "packageDependencies": [
-            ["@semantic-release/changelog", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:5.0.1"],
+            ["@semantic-release/changelog", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1"],
             ["@semantic-release/error", "npm:2.2.0"],
             ["@types/semantic-release", null],
             ["aggregate-error", "npm:3.1.0"],
@@ -722,10 +722,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:9.0.0", {
-          "packageLocation": "./.yarn/$$virtual/@semantic-release-git-virtual-9753ddb5b6/0/cache/@semantic-release-git-npm-9.0.0-28528be7a6-8a96bc9e44.zip/node_modules/@semantic-release/git/",
+        ["virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0", {
+          "packageLocation": "./.yarn/$$virtual/@semantic-release-git-virtual-7f90a546c9/0/cache/@semantic-release-git-npm-9.0.0-28528be7a6-8a96bc9e44.zip/node_modules/@semantic-release/git/",
           "packageDependencies": [
-            ["@semantic-release/git", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:9.0.0"],
+            ["@semantic-release/git", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0"],
             ["@semantic-release/error", "npm:2.2.0"],
             ["@types/semantic-release", null],
             ["aggregate-error", "npm:3.1.0"],
@@ -847,6 +847,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "semantic-release"
           ],
           "linkType": "HARD",
+        }]
+      ]],
+      ["@shmolf/noted-storage-symfony", [
+        ["workspace:.", {
+          "packageLocation": "./",
+          "packageDependencies": [
+            ["@shmolf/noted-storage-symfony", "workspace:."],
+            ["@commitlint/cli", "npm:12.1.4"],
+            ["@commitlint/config-conventional", "npm:12.1.4"],
+            ["@semantic-release/changelog", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1"],
+            ["@semantic-release/git", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0"],
+            ["husky", "npm:6.0.0"],
+            ["semantic-release", "npm:17.4.3"]
+          ],
+          "linkType": "SOFT",
         }]
       ]],
       ["@tootallnate/once", [
@@ -3793,21 +3808,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["normalize-url", "npm:6.0.1"]
           ],
           "linkType": "HARD",
-        }]
-      ]],
-      ["noted-storage-symfony", [
-        ["workspace:.", {
-          "packageLocation": "./",
-          "packageDependencies": [
-            ["noted-storage-symfony", "workspace:."],
-            ["@commitlint/cli", "npm:12.1.4"],
-            ["@commitlint/config-conventional", "npm:12.1.4"],
-            ["@semantic-release/changelog", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:5.0.1"],
-            ["@semantic-release/git", "virtual:f51557f63f28bf5f05804d760c87afdec3a1b3327934055c6107910a588896bef81a8efcd3615344e056b1963700087842f9737d68ddf89dc38ba0b2a684acf2#npm:9.0.0"],
-            ["husky", "npm:6.0.0"],
-            ["semantic-release", "npm:17.4.3"]
-          ],
-          "linkType": "SOFT",
         }]
       ]],
       ["npm", [
