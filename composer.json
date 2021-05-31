@@ -58,7 +58,7 @@
             "@lint-php"
         ],
         "lint-php": [
-            "phpcs ./phpcs.dist.xml"
+            "phpcs ./phpcs.xml.dist"
         ],
         "analysis" : [
             "@psalm"
