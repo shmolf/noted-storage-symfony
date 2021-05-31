@@ -34,7 +34,7 @@ jobs:
         run: composer run-script all-checks
 
   # Using `check-cache` will ensure the yarn.lock matches installed packages
-  prepare-release:
+  verify-dependencies:
     needs: build-php
     runs-on: ubuntu-latest
     steps:
