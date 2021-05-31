@@ -1,0 +1,27 @@
+{
+  "name": "noted-storage-symfony",
+  "version": "1.0.0",
+  "description": "Dev environment for package",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shmolf/noted-storage-symfony.git"
+  },
+  "author": "Nicholas Browning",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shmolf/noted-storage-symfony/issues"
+  },
+  "homepage": "https://github.com/shmolf/noted-storage-symfony#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@commitlint/config-conventional": "^12.1.4",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "husky": "^6.0.0",
+    "semantic-release": "^17.4.3"
+  }
+}
