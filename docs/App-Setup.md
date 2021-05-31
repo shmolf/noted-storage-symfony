@@ -335,7 +335,7 @@ If for whatever reason, the commit goes through (incomplete setup), then 'uncomm
     [
       "@semantic-release/git",
       {
-        "assets": [, "docs/CHANGELOG.md"]
+        "assets": ["docs/CHANGELOG.md"]
       }
     ]
   ]
