@@ -33,7 +33,7 @@ jobs:
       - name: Run all checks
         run: composer run-script all-checks
 
-  # With using zero-intall, may not need this job at all
+  # Using `check-files` will ensure the yarn.lock matches installed packages
   prepare-release:
     needs: build-php
     runs-on: ubuntu-latest
@@ -42,16 +42,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 12
-
-      # - name: Cache NPM packages
-      #   id: npm-cache
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: node_modules
-      #     key: ${{ runner.os }}-npm-${{ hashFiles('**/package.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-npm-
-      - run: npm install
+      - run: npx yarn install --check-files
 
   release:
     needs: prepare-release
@@ -64,4 +55,4 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npx yarn semantic-release
+        run: npm install && npx yarn semantic-release
