@@ -45,7 +45,7 @@ jobs:
       - run: npx yarn install --check-cache
 
   release:
-    needs: prepare-release
+    needs: verify-dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
