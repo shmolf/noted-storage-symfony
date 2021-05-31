@@ -33,7 +33,7 @@ jobs:
       - name: Run all checks
         run: composer run-script all-checks
 
-  # Using `check-files` will ensure the yarn.lock matches installed packages
+  # Using `check-cache` will ensure the yarn.lock matches installed packages
   prepare-release:
     needs: build-php
     runs-on: ubuntu-latest
@@ -55,4 +55,4 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm install && npx yarn semantic-release
+        run: npx yarn semantic-release
