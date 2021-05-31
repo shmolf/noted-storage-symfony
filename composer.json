@@ -1,4 +1,6 @@
 {
+    "name": "shmolf/noted-storage-symfony",
+    "description": "Symfony application for storing Note'd markdown notes",
     "type": "project",
     "license": "proprietary",
     "require": {
