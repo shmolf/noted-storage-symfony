@@ -270,14 +270,22 @@ Regardless, we'll want to make some tweaks to the `package.json`, after it's gen
 
 ### Install Dependencies
 
+According to [Semantic Release Plugin docs](https://github.com/semantic-release/semantic-release/blob/master/docs/usage/plugins.md#default-plugins)
+several of these packages are included by default with `semantic-release`. So, they don't need to be manually installed:
+- `@semantic-release/commit-analyzer`
+- `@semantic-release/release-notes-generator`
+- `@semantic-release/npm` - though, we won't be using this for our project
+- `@semantic-release/git`
+
 ```bash
-npx yarn add -D husky @commitlint/{config-conventional,cli} semantic-release @semantic-release/{git,changelog}
+npx yarn add -D husky @commitlint/{config-conventional,cli} semantic-release @semantic-release/{git,changelog} conventional-changelog-conventionalcommits
 ```
 1. `husky` - This gets us Husky-managed git hooks
 1. `@commitlint/{config-conventional,cli}` - This gets us the CommitLint, which'll verify our commit messages meet the standard
 1. `semantic-release` - This is the core of Semantic Release
 1. `@semantic-release/{git,changelog}` - Two plugins. One for generating commits as part of release (changelog file),
    and the other for generating the changelog file.
+1. `conventional-changelog-conventionalcommits` - Since we're using the Conventional-Commit convention
 
 ### Configure CommitLint
 
@@ -311,13 +319,13 @@ If for whatever reason, the commit goes through (incomplete setup), then 'uncomm
   "branches": ["main"],
   "plugins": [
     ["@semantic-release/commit-analyzer", {
-      "preset": "conventionalchangelog",
+      "preset": "conventionalcommits",
       "parserOpts": {
         "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
       }
     }],
     ["@semantic-release/release-notes-generator", {
-      "preset": "conventionalchangelog",
+      "preset": "conventionalcommits",
       "parserOpts": {
         "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
       },
