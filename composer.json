@@ -12,7 +12,9 @@
         "symfony/yaml": "4.4.*"
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.6"
+        "psalm/plugin-symfony": "^2.3",
+        "squizlabs/php_codesniffer": "^3.6",
+        "vimeo/psalm": "^4.7"
     },
     "config": {
         "preferred-install": {
@@ -54,6 +56,14 @@
         ],
         "lint-php": [
             "phpcs ./phpcs.dist.xml"
+        ],
+        "analysis" : [
+            "@psalm"
+        ],
+        "psalm": "psalm",
+        "all-checks": [
+            "@lint",
+            "@analysis"
         ]
     },
     "conflict": {
