@@ -33,6 +33,7 @@ jobs:
     - name: Run all checks
       run: composer run-script all-checks
 
+  # With using zero-intall, may not need this job at all
   prepare-release:
     needs: build-php
     runs-on: ubuntu-latest
