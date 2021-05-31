@@ -40,8 +40,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@commitlint/cli", "npm:12.1.4"],
             ["@commitlint/config-conventional", "npm:12.1.4"],
             ["@semantic-release/changelog", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1"],
-            ["@semantic-release/commit-analyzer", "virtual:75667890c0dfc35db1e7386b2f0243952aafcc6dcb4748b7608ca46f1f07abdd71745611943549b3195f204a61e00d858e0b6a69c286c3cc9c88cac22d733417#npm:8.0.1"],
             ["@semantic-release/git", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0"],
+            ["conventional-changelog-conventionalcommits", "npm:4.6.0"],
             ["husky", "npm:6.0.0"],
             ["semantic-release", "npm:17.4.3"]
           ],
@@ -858,8 +858,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@commitlint/cli", "npm:12.1.4"],
             ["@commitlint/config-conventional", "npm:12.1.4"],
             ["@semantic-release/changelog", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:5.0.1"],
-            ["@semantic-release/commit-analyzer", "virtual:75667890c0dfc35db1e7386b2f0243952aafcc6dcb4748b7608ca46f1f07abdd71745611943549b3195f204a61e00d858e0b6a69c286c3cc9c88cac22d733417#npm:8.0.1"],
             ["@semantic-release/git", "virtual:ae45ee5508aea6883fb8dbd24ff794426cdf8a72ed77884b1e9d3de32b87719ccf38c18856dacb42ef0316d577110129077b9e2f5f70c9c2970611a7f2269594#npm:9.0.0"],
+            ["conventional-changelog-conventionalcommits", "npm:4.6.0"],
             ["husky", "npm:6.0.0"],
             ["semantic-release", "npm:17.4.3"]
           ],
