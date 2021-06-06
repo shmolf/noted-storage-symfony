@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='UTF-8'>
+    <meta name= 'viewport' content = 'width = device-width'>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>{% block title %}Note'd Storage{% endblock %}</title>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo">
+                Note'd {% block pageContext %}{% endblock %}
+            </a>
+            <ul id="nav-mobile" class="right">
+            {% block navitems %}{% endblock %}
+            {% if is_granted('ROLE_USER') %}
+                <li>
+                    <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                        <i class="fas fa-user"></i>
+                        <i class="fas fa-sort-down"></i>
+                    </a>
+                    <ul id="dropdown1" class="dropdown-content" tabindex="0" style="">
+
+                        <li tabindex="0">
+                            <a href="{{ path('account.profile') }}">Profile</a>
+                        </li>
+                        <li tabindex="0">
+                            <a href="{{ path('logout') }}">Logout</a>
+                        </li>
+                    </ul>
+                </li>
+            {% else %}
+                <li><a href="{{ path('login') }}">Login</a></li>
+            {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <main>
+        {{ _self.cookiePopup() }}
+        {% block body %}{% endblock %}
+    </main>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
+</html>
+
+{% macro cookiePopup() %}
+    <div id="cookie-popup" class="modal bottom-sheet">
+        <div class="modal-content"></div>
+    </div>
+{% endmacro %}

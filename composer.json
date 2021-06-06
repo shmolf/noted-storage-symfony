@@ -17,6 +17,7 @@
         "symfony/framework-bundle": "4.4.*",
         "symfony/proxy-manager-bridge": "4.4.*",
         "symfony/security-bundle": "4.4.*",
+        "symfony/webpack-encore-bundle": "^1.11",
         "symfony/yaml": "4.4.*"
     },
     "require-dev": {
