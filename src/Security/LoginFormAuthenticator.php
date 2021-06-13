@@ -23,11 +23,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     use TargetPathTrait;
 
     private UserRepository $userRepository;
-
     private RouterInterface $router;
-
     private CsrfTokenManagerInterface $csrfTokenManager;
-
     private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(
@@ -84,7 +81,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->router->generate('home'));
+        return new RedirectResponse($this->router->generate('account.edit'));
     }
 
     protected function getLoginUrl(): string

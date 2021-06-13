@@ -3,27 +3,28 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('user-create') }}
+    {{ encore_entry_link_tags('user-edit') }}
 {% endblock %}
+
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('user-create') }}
+    {{ encore_entry_script_tags('user-edit') }}
 {% endblock %}
 
-{% block pageContext %}- New Account{% endblock %}
+{% block pageContext %}- Account{% endblock %}
 
 {% block body %}
     <div id="form-errors"></div>
-    <form id="account-details" method="post" action="{{ path('account.create.save') }}">
+    <form id="account-details" method="post" action="{{ path('account.edit.save') }}">
         <div class="row">
             <div class="input-field col s12 m6">
-                {{ accountInputs.email() }}
+                {{ accountInputs.email(user.email) }}
             </div>
             <div class="input-field col s12 m6">
                 {{ accountInputs.password() }}
             </div>
         </div>
-        <button id="create-btn" type="submit" class="btn right">Create</button>
+        <button id="create-btn" type="submit" class="btn right">Save</button>
     </form>
 {% endblock %}

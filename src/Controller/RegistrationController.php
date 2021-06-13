@@ -59,10 +59,8 @@ class RegistrationController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $user = new User();
 
-        $user->email = $email;
+        $user->setEmail($email);
         $user->setPassword($this->passwordEncoder->encodePassword($user, $password));
-        $user->firstName = $input['first-name'];
-        $user->lastName = $input['last-name'];;
         $user->setCreatedDate(new DateTime());
 
         try {
@@ -145,13 +143,11 @@ class RegistrationController extends AbstractController
      */
     private function parseInputs(Request $request): array
     {
-        $requestData = $request->request->all();
+        $requestData = json_decode($request->getContent(), true); // $request->request->all();
 
         return [
             'email' => UserInputStrings::trimMb4String($requestData['email'] ?? '') ?: null,
-            'password' => UserInputStrings::trimMb4String($requestData['first-name'] ?? '') ?: null,
-            'first-name' => UserInputStrings::trimMb4String($requestData['last-name'] ?? '') ?: null,
-            'last-name' => $requestData['password'] ?? null,
+            'password' => $requestData['password'] ?? null,
         ];
     }
 }
