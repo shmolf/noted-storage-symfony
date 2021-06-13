@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "commonjs",
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "baseUrl": "./",
+        "lib": ["ES2016", "DOM"],
+        "paths": {
+            "Scripts/*": ["./assets/scripts/*"],
+            "Styles/*": ["./assets/styles/*"]
+        }
+    },
+    "exclude": [
+        "public/build/**/*",
+        "packages-cache",
+        "node_modules"
+    ]
+  }
