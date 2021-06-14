@@ -22,9 +22,10 @@
                 {{ accountInputs.email(user.email) }}
             </div>
             <div class="input-field col s12 m6">
-                {{ accountInputs.password() }}
+                {{ accountInputs.password({required: false, showHints: true}) }}
             </div>
         </div>
-        <button id="create-btn" type="submit" class="btn right">Save</button>
+        <input id="token" type="hidden" name="_csrf_token" value="{{ csrf_token('user-edit') }}" />
+        <button id="save-btn" type="submit" class="btn right">Save</button>
     </form>
 {% endblock %}

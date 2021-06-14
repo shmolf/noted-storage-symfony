@@ -1,34 +1,36 @@
 import axios from 'axios';
-import { AjaxErrorRepsonse } from 'Scripts/types/types';
+import { AjaxErrorRepsonse } from "Scripts/types/types";
 
-let form: HTMLElement|null;
+let userForm: HTMLElement|null;
 let errorOutput: HTMLElement|null;
+let saveBtn: HTMLElement|null;
 
 window.addEventListener('DOMContentLoaded', () => {
-    form = document.getElementById('account-details');
+    userForm = document.getElementById('account-details');
     errorOutput = document.getElementById('form-errors');
+    saveBtn = document.getElementById('save-btn');
 
-    form?.addEventListener('submit', (e) => {
+    userForm?.addEventListener('submit', (e) => {
         e.preventDefault();
-        document.getElementById('create-btn')?.setAttribute('disabled', 'disabled');
+        saveBtn?.setAttribute('disabled', 'disabled');
         saveUser();
     });
 });
 
 function saveUser() {
-    if (errorOutput !== null) {
+    if (errorOutput instanceof HTMLElement) {
         errorOutput.innerHTML = '';
     }
 
-    const url = decodeURI(String(form?.getAttribute('action')));
+    const url = decodeURI(String(userForm?.getAttribute('action')));
     const data = {
-        email: String((document.getElementById('email') as HTMLInputElement)?.value).trim(),
-        password: String((document.getElementById('password') as HTMLInputElement)?.value),
-        token: String((document.getElementById('token') as HTMLInputElement)?.value),
+        email: String((document.getElementById('email') as HTMLInputElement).value).trim(),
+        password: String((document.getElementById('password') as HTMLInputElement).value) || null,
+        token: String((document.getElementById('token') as HTMLInputElement).value) || null,
     };
 
     axios.post(url, data, { headers: {'X-Requested-With': 'XMLHttpRequest' },})
-        .then(() => window.location.href = '/login')
+        .then(() => saveBtn?.removeAttribute('disabled'))
         .catch((error) => {
             try {
                 const { data } = error.response;

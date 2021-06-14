@@ -28,6 +28,7 @@ Encore
      */
     .addEntry('app', './assets/app.ts')
     .addEntry('user-create', './assets/scripts/user/create.ts')
+    .addEntry('user-edit', './assets/scripts/user/edit.ts')
     .addEntry('password-visibility', './assets/scripts/inputs/password.ts')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)

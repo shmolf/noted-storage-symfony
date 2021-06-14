@@ -21,9 +21,10 @@
                 {{ accountInputs.email() }}
             </div>
             <div class="input-field col s12 m6">
-                {{ accountInputs.password() }}
+                {{ accountInputs.password({'required': true, 'showHints': true}) }}
             </div>
         </div>
+        <input id="token" type="hidden" name="_csrf_token" value="{{ csrf_token('user-create') }}" />
         <button id="create-btn" type="submit" class="btn right">Create</button>
     </form>
 {% endblock %}

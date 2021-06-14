@@ -10,9 +10,9 @@ account.create.save:
 
 account.edit.save:
   path: /edit
-  controller: App\Controller\RegistrationController::save
+  controller: App\Controller\User\AccountController::save
   methods: POST
 
 account.edit:
   path: /
-  controller: App\Controller\RegistrationController::edit
+  controller: App\Controller\User\AccountController::edit
