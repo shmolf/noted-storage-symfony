@@ -5,7 +5,7 @@ namespace App\Exception;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class UserModificationException extends HttpException implements ErrorList
+class AppTokenException extends HttpException implements ErrorList
 {
     private array $errors;
 

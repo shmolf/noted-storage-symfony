@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -43,6 +45,16 @@ class User implements UserInterface
      * @ORM\Column(type="datetime")
      */
     private $createdDate;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AppToken::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $appTokens;
+
+    public function __construct()
+    {
+        $this->appTokens = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -118,6 +130,8 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return void
      */
     public function eraseCredentials()
     {
@@ -144,6 +158,37 @@ class User implements UserInterface
     public function setCreatedDate(\DateTimeInterface $createdDate): self
     {
         $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AppToken[]
+     * @psalm-return Collection
+     */
+    public function getAppTokens(): Collection
+    {
+        return $this->appTokens;
+    }
+
+    public function addAppToken(AppToken $appToken): self
+    {
+        if (!$this->appTokens->contains($appToken)) {
+            $this->appTokens[] = $appToken;
+            $appToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAppToken(AppToken $appToken): self
+    {
+        if ($this->appTokens->removeElement($appToken)) {
+            // set the owning side to null (unless already changed)
+            if ($appToken->getUser() === $this) {
+                $appToken->setUser(null);
+            }
+        }
 
         return $this;
     }

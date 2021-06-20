@@ -30,6 +30,9 @@ Encore
     .addEntry('user-create', './assets/scripts/user/create.ts')
     .addEntry('user-edit', './assets/scripts/user/edit.ts')
     .addEntry('password-visibility', './assets/scripts/inputs/password.ts')
+    .addEntry('oauth-login', './assets/scripts/user/oauth-login.ts')
+    .addEntry('app-token-list', './assets/scripts/user/tokens.ts')
+    .addEntry('new-app-token', './assets/scripts/user/new-app-token.ts')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     // .enableStimulusBridge('./assets/controllers.json')

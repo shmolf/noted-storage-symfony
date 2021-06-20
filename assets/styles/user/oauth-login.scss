@@ -1,0 +1,42 @@
+// @import 'materialize-override.scss';
+@import 'Styles/app-variables.scss';
+
+html {
+  background-color: var(--page-background);
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  width: 90vw;
+  flex: 1 0 auto;
+  margin: auto;
+}
+
+.error {
+  color: var(--error-red);
+}
+
+.hidden {
+  display: none !important;
+}
+
+input {
+  &[type="text"]:not(.select-dropdown), &[type="email"], &[type="password"] {
+    color: var(--color-2);
+  }
+}
+
+.input-field .helper-text {
+  color: var(--color-2);
+}
+
+.error-message {
+  color: var(--color-2);
+  padding: 15px;
+  border: var(--error-red) solid 1px;
+}

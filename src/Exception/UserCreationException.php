@@ -24,7 +24,7 @@ class UserCreationException extends HttpException implements ErrorList
         return $this->errors;
     }
 
-    public function setErrors(array $errors): self
+    public function setErrors(array $errors): ErrorList
     {
         $this->errors = $errors;
 

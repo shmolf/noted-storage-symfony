@@ -16,3 +16,24 @@ account.edit.save:
 account.edit:
   path: /
   controller: App\Controller\User\AccountController::edit
+
+# Consider having a setup for maintaining a list of access tokens
+# account.oauth:
+#   prefix: /oauth
+#   resource: 'oauth.yaml'
+
+account.oauth.app.list:
+  path: /oauth/app/list
+  controller: App\Controller\User\AccountController::appTokenList
+
+account.oauth.app.new:
+  path: /oauth/app
+  controller: App\Controller\User\AccountController::createAppToken
+  methods: POST
+
+account.oauth.app.delete:
+  path: /oauth/app/{uuid}
+  controller: App\Controller\User\AccountController::deleteAppToken
+  methods: DELETE
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'

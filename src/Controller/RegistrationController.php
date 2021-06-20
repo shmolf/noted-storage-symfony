@@ -39,9 +39,8 @@ class RegistrationController extends AbstractController
         LoginFormAuthenticator $authenticator,
         GuardAuthenticatorHandler $guardHandler,
         Request $request
-    ): Response {
+    ): ?Response {
         $input = $this->parseInputs($request);
-
         $token = new CsrfToken('user-create', $input['csrf_token']);
 
         if (!$this->csrfTokenManager->isTokenValid($token)) {
@@ -49,7 +48,7 @@ class RegistrationController extends AbstractController
         }
 
         $email = $input['email'];
-        $password = $input['password'];
+        $password = $input['password'] ?? '';
 
         if ($email === null || preg_match(UserInputStrings::REGEX_EMAIL, $email) !== 1) {
             throw (new UserCreationException(Response::HTTP_BAD_REQUEST, 'There was an error with provided inputs'))
@@ -96,15 +95,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     *
-     * @param Request $request
-     * @return array{
-     *     email: string|null
-     *     password: string|null
-     *     first-name: string|null
-     *     last-nam: string|null
-     * }
-     * @throws LogicException
+     * @return array{ email: ?non-falsy-string, password: ?string, csrf_token: ?string }
      */
     private function parseInputs(Request $request): array
     {
@@ -112,8 +103,8 @@ class RegistrationController extends AbstractController
 
         return [
             'email' => UserInputStrings::trimMb4String($requestData['email'] ?? '') ?: null,
-            'password' => $requestData['password'] ?? null,
-            'csrf_token' => $requestData['token'] ?? null,
+            'password' => !empty($requestData['password']) ? (string)$requestData['password'] : null,
+            'csrf_token' => !empty($requestData['token']) ? (string)$requestData['token'] : null,
         ];
     }
 }

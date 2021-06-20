@@ -1,6 +1,7 @@
 // @import 'materialize-override.scss';
 @import 'Styles/app-variables.scss';
 @import 'Styles/cookie-consent-overrides.scss';
+@import 'Styles/override-materialize.scss';
 
 html {
   background-color: var(--page-background);
@@ -16,6 +17,7 @@ main {
   width: 90vw;
   flex: 1 0 auto;
   margin: auto;
+  color: var(--color-2);
 }
 
 nav {

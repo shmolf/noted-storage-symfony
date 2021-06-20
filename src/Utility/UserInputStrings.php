@@ -14,6 +14,8 @@ class UserInputStrings {
 
     public const REGEX_EMAIL = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
 
+    public const REGEX_OAUTH_TOKEN = '^/[\-\.\_\~\+\/a-zA-Z0-9]/$';
+
     public static function trimMb4String(string $string, string $trim_chars = '\s'): string
     {
         return preg_replace("/^[{$trim_chars}]*(?U)(.*)[{$trim_chars}]*$/u", '\\1', $string);

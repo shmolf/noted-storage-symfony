@@ -3,11 +3,11 @@
 namespace App\EventListener;
 
 use App\Exception\ErrorList;
-use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Throwable;
 
 class ExceptionListener
 {
@@ -18,7 +18,7 @@ class ExceptionListener
         $this->env = $env;
     }
 
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
         $exception = $event->getThrowable();
@@ -29,7 +29,7 @@ class ExceptionListener
         $event->setResponse($response);
     }
 
-    private function createApiResponse(Exception $exception): JsonResponse
+    private function createApiResponse(Throwable $exception): JsonResponse
     {
         $statusCode = $exception instanceof HttpExceptionInterface
             ? $exception->getStatusCode()
@@ -44,7 +44,7 @@ class ExceptionListener
         return new JsonResponse($data, $statusCode);
     }
 
-    private function createBrowserResponse(Exception $exception): Response
+    private function createBrowserResponse(Throwable $exception): Response
     {
         $response = new Response();
 
@@ -61,6 +61,9 @@ class ExceptionListener
             $additionalInfo .= <<<HTML
             <p/>{$exception->getMessage()}</p>
             <pre>{$exception->getTraceAsString()}</pre>
+            <hr />
+            <pre>{$exception->getPrevious()->getMessage()}</pre>
+            <pre>{$exception->getPrevious()->getTraceAsString()}</pre>
             HTML;
         }
 
