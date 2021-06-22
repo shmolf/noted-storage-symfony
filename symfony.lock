@@ -151,6 +151,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.4.0"
     },
+    "phplang/scope-exit": {
+        "version": "1.0.0"
+    },
     "phpmd/phpmd": {
         "version": "2.10.1"
     },
@@ -252,6 +255,9 @@
     "sebastian/version": {
         "version": "3.0.2"
     },
+    "shmolf/noted-hydrator": {
+        "version": "v1.0.1"
+    },
     "squizlabs/php_codesniffer": {
         "version": "3.6",
         "recipe": {
@@ -263,6 +269,12 @@
         "files": [
             "phpcs.xml.dist"
         ]
+    },
+    "swaggest/json-diff": {
+        "version": "v3.8.1"
+    },
+    "swaggest/json-schema": {
+        "version": "v0.12.35"
     },
     "symfony/asset": {
         "version": "v4.4.25"
