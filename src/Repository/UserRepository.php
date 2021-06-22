@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\AppToken;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method User|null   find($id, $lockMode = null, $lockVersion = null)
  * @method User|null   findOneBy(array $criteria, array $orderBy = null)
  */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -32,6 +34,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    public function loadUserByUsername($authToken): ?User
+    {
+        /** @var AppToken */
+        $appToken = $this->_em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $authToken]);
+
+        return $appToken instanceof AppToken ? $appToken->getUser() : null;
     }
 
     // /**

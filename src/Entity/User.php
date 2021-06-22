@@ -37,11 +37,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     */
-    private $apiToken;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdDate;
@@ -149,17 +144,6 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getApiToken(): string
-    {
-        return $this->apiToken;
-    }
-
-    public function setApiToken(string $apiToken): self
-    {
-        $this->apiToken = $apiToken;
-        return $this;
     }
 
     public function getCreatedDate(): ?\DateTimeInterface

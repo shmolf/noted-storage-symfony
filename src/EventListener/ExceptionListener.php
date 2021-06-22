@@ -62,8 +62,6 @@ class ExceptionListener
             <p/>{$exception->getMessage()}</p>
             <pre>{$exception->getTraceAsString()}</pre>
             <hr />
-            <pre>{$exception->getPrevious()->getMessage()}</pre>
-            <pre>{$exception->getPrevious()->getTraceAsString()}</pre>
             HTML;
         }
 

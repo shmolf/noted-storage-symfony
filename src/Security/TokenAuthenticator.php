@@ -2,7 +2,8 @@
 
 namespace App\Security;
 
-use App\Entity\User;
+use App\Entity\AppToken;
+use App\Repository\AppTokenRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,9 +42,9 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         return $request->headers->get('X-AUTH-TOKEN');
     }
 
-    public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
+    public function getUser($token, UserProviderInterface $userProvider): ?UserInterface
     {
-        if (null === $credentials) {
+        if (null === $token) {
             // The token header was empty, authentication fails with HTTP Status
             // Code 401 "Unauthorized"
             return null;
@@ -52,7 +53,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         // The "username" in this case is the apiToken, see the key `property`
         // of `your_db_provider` in `security.yaml`.
         // If this returns a user, checkCredentials() is called next:
-        return $userProvider->loadUserByUsername($credentials);
+        return $userProvider->loadUserByUsername($token);
     }
 
     public function checkCredentials($credentials, UserInterface $user): bool
@@ -74,7 +75,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     {
         $data = [
             // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()) . 'yep'
 
             // or to translate this message
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())

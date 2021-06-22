@@ -24,3 +24,7 @@ logout:
 account:
   resource: 'routes/accounts.yaml'
   prefix: /account
+
+api:
+  resource: 'routes/api/routes.yaml'
+  prefix: /api
