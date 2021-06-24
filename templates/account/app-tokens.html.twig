@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('app-token-list') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('app-token-list') }}
+{% endblock %}
+
+{% block pageContext %}- App Tokens{% endblock %}
+
+{% block body %}
+    <div id="form-errors"></div>
+    <form method="post" id="generate-token" action="{{ path('account.oauth.app.new') }}">
+        <div class="row">
+            <div class="input-field col s12 m6">
+                {% set txtAppName = 'Application Name'|trans %}
+                <label for="name">{{ txtAppName }}</label>
+                <input type="text" id="name" name="name" class="active validate" required autofocus
+                    title="{{ txtAppName }}"
+                    pattern="^\s*\w+.*$" />
+                <span class="helper-text" data-error="{{ 'Invalid'|trans }} {{ txtAppName }}" data-success="👍"></span>
+            </div>
+            <div class="input-field col s12 m6">
+                {% set txtDateName = 'Expiration Date'|trans %}
+                <label for="expiration">{{ txtDateName }}</label>
+                <input type="date" id="expiration" name="expiration" class="active validate"
+                    min="{{ 'now'|date_modify('+1 day')|date('Y-m-d') }}"
+                    placeholder="yyyy-mm-dd"
+                    title="{{ txtDateName }}" />
+                <span class="helper-text" data-error="{{ 'Invalid'|trans }} {{ txtDateName }}" data-success="👍"></span>
+            </div>
+        </div>
+        <input id="token" type="hidden" name="_csrf_token" value="{{ csrf_token(crsfId) }}" />
+        <button id="generate-btn" type="submit" class="btn right">{{ 'Generate Token'|trans }}</button>
+    </form>
+    <table class="striped highlight centered">
+        <thead>
+            <tr>
+                <th>{{ 'Name'|trans }}</th>
+                <th>{{ 'Created'|trans }}</th>
+                <th>{{ 'Expires'|trans }}</th>
+                <th>{{ 'Last Used'|trans }}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% if tokens is empty %}
+            <tr class="token-record">
+                <td colspan="5">
+                    {{ 'You have not generated any Application Tokens yet'|trans }}
+                </td>
+            </tr>
+        {% else %}
+            {% for token in tokens %}
+                <tr class="token-record" data-url="{{ path('account.oauth.app.delete', {'uuid': token.uuid}) }}">
+                    <td>{{ token.name }}</td>
+                    <td><time>{{ token.created|date('Y-m-d H:i:s') }}</time></td>
+                    <td><time>{{ token.expires|date('Y-m-d H:i:s')|default('forever') }}</time></td>
+                    {% set lastAccess = token.lastAccess is not null
+                        ? token.lastAccess|date('Y-m-d H:i:s')
+                        : 'not used yet'
+                    %}
+                    <td><time>{{ lastAccess }}</time></td>
+                    <td><button type="button" class="btn delete">{{ 'Delete'|trans }}</button></td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

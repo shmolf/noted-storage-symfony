@@ -126,10 +126,15 @@ to any other commands we might add later.
 
 ## Add Psalm
 ```bash
-composer require --dev vimeo/psalm psalm/plugin-symfony && \
+composer require --dev vimeo/psalm && \
+./vendor/bin/psalm --init
+```
+
+Now, let's add some plugins so that Psalm understands Symfony & Doctrine
+```bash
+composer require --dev psalm/plugin-symfony weirdan/doctrine-psalm-plugin && \
 vendor/bin/psalm-plugin enable psalm/plugin-symfony && \
-./vendor/bin/psalm --init && \
-./vendor/bin/psalm
+vendor/bin/psalm-plugin enable weirdan/doctrine-psalm-plugin
 ```
 
 Append to `composer.json`'s `scripts` section

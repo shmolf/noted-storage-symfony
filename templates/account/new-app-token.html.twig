@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('new-app-token') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('new-app-token') }}
+{% endblock %}
+
+{% block pageContext %}- App Tokens{% endblock %}
+
+{% block body %}
+    <div>
+        <p>
+        </p>
+        <p>
+            New token created called '{{ name }}'. <b>Be sure to copy this token, as it will no longer be available.</b>
+        </p>
+        <p>
+            <pre>{{ token }}</pre>
+        </p>
+    </div>
+    <div>
+        <a href="{{ path('account.oauth.app.list') }}">Return to app token list</a>
+    </div>
+    <p id="outbox"></p>
+{% endblock %}

@@ -1,3 +1,30 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+home:
+  path: /
+  controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+  defaults:
+    route: 'account.edit'
+    permanent: false
+
+security:
+  path: /security
+  controller: App\Controller\SecurityController::index
+
+login:
+  path: /login
+  controller: App\Controller\SecurityController::login
+
+logout:
+  path: /logout
+  # we don't need to specify a controller, since `security.yaml` identifies this route-key as logout, and does magic
+
+account:
+  resource: 'routes/accounts.yaml'
+  prefix: /account
+
+api:
+  resource: 'routes/api/routes.yaml'
+  prefix: /api

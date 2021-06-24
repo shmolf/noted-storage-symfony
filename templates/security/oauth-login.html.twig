@@ -1,0 +1,35 @@
+{% import "account/inputs.html.twig" as accountInputs %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='UTF-8' />
+    <meta name= 'viewport' content = 'width = device-width' />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Note'd Storage Login</title>
+    {{ encore_entry_link_tags('oauth-login') }}
+</head>
+<body>
+    <main>
+        <div class="error-message" id="form-errors"></div>
+        <form method="post" class="row" id="form-login">
+            <div class="col s12">
+                <div class="input-field col s12 m6">
+                    {{ accountInputs.email() }}
+                </div>
+                <div class="input-field col s12 m6">
+                    {{ accountInputs.password() }}
+                </div>
+                <div class="row col s12">
+                    <div class="right">
+                        <button id="login" type="submit" class="btn">login</button>
+                        <input id="token" type="hidden" value="{{ csrf_token('oauth-login') }}" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+    {{ encore_entry_script_tags('oauth-login') }}
+</body>
+</html>
