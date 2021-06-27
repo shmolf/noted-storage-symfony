@@ -17,3 +17,21 @@ The host of Note'd does not need knowledge or access to any storage application,
 This implies that a storage applition can be hosted behind a firewall, and so long as the user is behind the same firewall, they'll have
 unrestricted access to their own notes api host. This would be considered an additional layer of protection, on top of OAuth token
 authorization.
+
+## Docker
+
+Docker configurations are based on @GhazanfarMir's [setup](https://github.com/GhazanfarMir/dockercompose-laravel-nginx).
+_Thank you!_
+
+I highly recommend using [Portainer](https://documentation.portainer.io/quickstart/) to manage your Docker Containers.
+
+### Environment Variables
+Copy the environment file to `docker.env.local`, and update the variables to match your setup.
+```bash
+cp docker.env docker.env.local
+```
+
+### Build the Images
+```bash
+docker-compose up -d --build
+```

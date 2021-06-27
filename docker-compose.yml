@@ -1,0 +1,76 @@
+# Docker Config is based on: https://github.com/GhazanfarMir/dockercompose-laravel-nginx
+version: "3.3"
+
+services:
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    image: shmolf/nginx:latest
+    container_name: noted-storage-nginx
+    ports:
+      - "${WEB_PORT}:80"
+      - "${SSL_PORT}:443"
+    volumes:
+      - ${APP_PATH}:${DOCUMENT_ROOT}
+      - ./docker/nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/config/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - appnet
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    image: shmolf/php-fpm:latest
+    container_name: noted-storage-php
+    volumes:
+      - ${APP_PATH}:${DOCUMENT_ROOT}
+      - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    networks:
+      - appnet
+
+    # first load the 'db' service
+    depends_on:
+      - db
+
+    # make 'db' a known service/host inside of 'web'
+    # use this to make a mysql connection to host 'db'
+    links:
+      - db
+
+  node:
+    build:
+      context: ./docker/node
+      dockerfile: Dockerfile
+    image: shmolf/node:latest
+    container_name: noted-storage-node
+    volumes:
+      - ${APP_PATH}:${DOCUMENT_ROOT}
+    networks:
+          - appnet
+
+  database:
+    image: mysql:latest
+    container_name: noted-storage-database
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - storage-app:/var/lib/mysql
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: "bridge"
+
+volumes:
+    storage-app:
