@@ -31,7 +31,16 @@ Copy the environment file to `docker.env.local`, and update the variables to mat
 cp docker.env docker.env.local
 ```
 
-### Build the Images
+To verify your config, run
 ```bash
-docker-compose up -d --build
+docker-compose --env-file docker.env.local config
+```
+
+### Build the Images
+Until I figure out how to `npm install` before `npm run dev`, it's broken out into multiple image configs.  
+And, need to run the `node-install` image first.
+([reference](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093))
+
+```bash
+docker-compose --env-file docker.env.local run --rm node-install; docker-compose --env-file docker.env.local up -d --build
 ```
