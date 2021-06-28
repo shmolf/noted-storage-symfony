@@ -3,8 +3,8 @@ version: "3.3"
 
 services:
   nginx:
-    image: nginx:latest
     container_name: noted-storage-nginx
+    image: nginx:latest
     ports:
       - "${WEB_PORT}:80"
       - "${SSL_PORT}:443"
@@ -17,26 +17,45 @@ services:
       - php
 
   php:
+    container_name: noted-storage-php
     build:
       context: ./docker/php
       dockerfile: Dockerfile
     image: shmolf/php-fpm:latest
-    container_name: noted-storage-php
     volumes:
       - ${APP_PATH}:${DOCUMENT_ROOT}
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
     working_dir: ${DOCUMENT_ROOT}
+    environment:
+      - DATABASE_URL=${SYMFONY_DB_URL}
+      - DATABASE_VERSION=${SYMFONY_DB_VERSION}
     networks:
       - appnet
     depends_on:
       - database
       - composer
       - node-build
+    command: php-fpm
 
     # make 'database' a known service/host inside of 'php'
     # use this to make a mysql connection to host 'database'
     links:
       - database
+
+  php-doctrine-migrate:
+    container_name: noted-storage-php-doctrine-mig
+    image: shmolf/php-fpm:latest
+    volumes:
+      - ${APP_PATH}:${DOCUMENT_ROOT}
+    working_dir: ${DOCUMENT_ROOT}
+    environment:
+      - DATABASE_URL=${SYMFONY_DB_URL}
+      - DATABASE_VERSION=${SYMFONY_DB_VERSION}
+    networks:
+      - appnet
+    links:
+      - database
+    command: bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
   node-base:
     container_name: noted-storage-node-base
@@ -68,17 +87,17 @@ services:
       - ${APP_PATH}:/app
 
   database:
-    image: mysql:latest
     container_name: noted-storage-database
+    image: mysql:8.0.25
     restart: always
     # https://dev.mysql.com/doc/mysql-linuxunix-excerpt/8.0/en/docker-mysql-more-topics.html
     command: [
       '--default-authentication-plugin=mysql_native_password',
-      '--character-set-server=utf8mb4',
-      '--collation-server=utf8mb4_col'
+      '--character-set-server=utf8mb4'
     ]
     volumes:
       - storage-app:/var/lib/mysql
+    hostname: mysql-container
     ports:
       - "${DB_PORT}:3306"
     environment:

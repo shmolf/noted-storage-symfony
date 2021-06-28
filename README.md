@@ -42,5 +42,5 @@ And, need to run the `node-install` image first.
 ([reference](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093))
 
 ```bash
-docker-compose --env-file docker.env.local run --rm node-install; docker-compose --env-file docker.env.local up -d --build
+docker-compose --env-file docker.env.local run --rm node-install; docker-compose --env-file docker.env.local up -d --build; docker-compose --env-file docker.env.local run --rm php-doctrine-migrate;
 ```
