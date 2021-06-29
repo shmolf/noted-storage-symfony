@@ -26,21 +26,26 @@ _Thank you!_
 I highly recommend using [Portainer](https://documentation.portainer.io/quickstart/) to manage your Docker Containers.
 
 ### Environment Variables
-Copy the environment file to `docker.env.local`, and update the variables to match your setup.
+Copy the docker environment file (`docker.env`) to  a new file (`docker.env.local`), and update the variables to match your setup.
 ```bash
 cp docker.env docker.env.local
 ```
 
-To verify your config, run
+Review the populated config:
 ```bash
 docker-compose --env-file docker.env.local config
 ```
 
 ### Build the Images
-Until I figure out how to `npm install` before `npm run dev`, it's broken out into multiple image configs.  
+Until I figure out how to `npm install` before `npm run dev`, it's broken out into multiple services.  
 And, need to run the `node-install` image first.
 ([reference](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093))
 
 ```bash
-docker-compose --env-file docker.env.local run --rm node-install; docker-compose --env-file docker.env.local up -d --build; docker-compose --env-file docker.env.local run --rm php-doctrine-migrate;
+docker-compose --env-file docker.env.local run --rm node-install; docker-compose --env-file docker.env.local up -d --build;
+```
+
+Can manually run the Doctrine Migration via
+```bash
+docker-compose --env-file docker.env.local run --rm php-doctrine-migrate;
 ```

@@ -20,4 +20,4 @@ RUN docker-php-ext-enable mysqli pdo pdo_mysql
 # RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 EXPOSE 9000
-# CMD php-fpm
+CMD php-fpm

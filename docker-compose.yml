@@ -34,8 +34,6 @@ services:
     depends_on:
       - database
       - composer
-      - node-build
-    command: php-fpm
 
     # make 'database' a known service/host inside of 'php'
     # use this to make a mysql connection to host 'database'
@@ -103,8 +101,9 @@ services:
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
+      # Uncomment these two, if they're defined in the `docker.env.local` file
+      # - MYSQL_USER=${DB_USER}
+      # - MYSQL_PASSWORD=${DB_PASSWORD}
     networks:
       - appnet
 
