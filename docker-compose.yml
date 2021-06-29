@@ -67,14 +67,14 @@ services:
     container_name: noted-storage-node-install
     extends:
       service: node-base
-    command: npm i
+    command: npx yarn install
   node-build:
     container_name: noted-storage-node-build
     extends:
       service: node-base
     depends_on:
       - node-install
-    command: npm run dev
+    command: npx yarn run dev
 
   composer:
     image: composer:2.1.3
