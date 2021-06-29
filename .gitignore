@@ -30,6 +30,7 @@
 ###< Yarn ###
 
 ###> symfony/webpack-encore-bundle ###
+package-lock.json
 /node_modules/
 /public/build/
 npm-debug.log
