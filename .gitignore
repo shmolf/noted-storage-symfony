@@ -30,8 +30,13 @@
 ###< Yarn ###
 
 ###> symfony/webpack-encore-bundle ###
+package-lock.json
 /node_modules/
 /public/build/
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> docker ###
+docker.env.local
+###< docker ###
