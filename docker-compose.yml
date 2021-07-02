@@ -51,6 +51,9 @@ services:
       - DATABASE_VERSION=${SYMFONY_DB_VERSION}
     networks:
       - appnet
+    depends_on:
+      - database
+      - composer
     links:
       - database
     command: bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
@@ -101,9 +104,8 @@ services:
     environment:
       - MYSQL_DATABASE=${DB_NAME}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      # Uncomment these two, if they're defined in the `docker.env.local` file
-      # - MYSQL_USER=${DB_USER}
-      # - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     networks:
       - appnet
 
