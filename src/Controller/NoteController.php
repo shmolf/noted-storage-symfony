@@ -46,7 +46,7 @@ class NoteController extends AbstractController
         $user = $this->getUser();
         $notes = $this->getDoctrine()
             ->getRepository(MarkdownNote::class)
-            ->findBy(['userId' => $user]);
+            ->findBy(['user' => $user]);
 
         $jsonResponse = $this->json($notes, 200, [], [
             'groups' => ['main'],
@@ -91,7 +91,7 @@ class NoteController extends AbstractController
 
         $note = $this->getDoctrine()
             ->getRepository(MarkdownNote::class)
-            ->findOneBy(['userId' => $user, 'uuid' => $uuid]);
+            ->findOneBy(['user' => $user, 'uuid' => $uuid]);
 
         return $this->json($note, 200, [], [
             'groups' => ['main'],
