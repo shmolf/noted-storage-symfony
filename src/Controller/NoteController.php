@@ -8,10 +8,12 @@ use App\Entity\User;
 use App\Repository\MarkdownNoteRepository;
 use DateTime;
 use Exception;
+use Ramsey\Uuid\Uuid;
 use shmolf\NotedHydrator\NoteHydrator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class NoteController extends AbstractController
@@ -22,15 +24,13 @@ class NoteController extends AbstractController
         $user = $this->getUser();
         $notes = $this->getDoctrine()
             ->getRepository(MarkdownNote::class)
-            ->findBy(['userId' => $user->getId()], ['lastModified' => 'DESC']);
+            ->findBy(['user' => $user], ['lastModified' => 'DESC']);
 
         $noteList = array_map(function(MarkdownNote $note) {
             return [
                 'title' => $note->getTitle(),
-                'tags' => array_map(function(NoteTag $tag) {
-                        return $tag->getName();
-                    }, $note->getTags()->toArray()),
-                'clientUuid' => $note->getClientUuid(),
+                'tags' => array_map(fn(NoteTag $tag) => $tag->getName(), $note->getTags()->toArray()),
+                'uuid' => $note->getUuid(),
                 'inTrashcan' => $note->getInTrashcan(),
                 'createdDate' => $note->getCreatedDate(),
                 'lastModified' => $note->getLastModified(),
@@ -40,26 +40,13 @@ class NoteController extends AbstractController
         return new JsonResponse($noteList);
     }
 
-    public function getNoteByClientUuid(string $uuid): JsonResponse
-    {
-        /** @var User */
-        $user = $this->getUser();
-        $note = $this->getDoctrine()
-            ->getRepository(MarkdownNote::class)
-            ->findOneBy(['userId' => $user->getId(), 'clientUuid' => $uuid]);
-
-        return $this->json($note, 200, [], [
-            'groups' => ['main'],
-        ]);
-    }
-
     public function getNotesForUser(): JsonResponse
     {
         /** @var User */
         $user = $this->getUser();
         $notes = $this->getDoctrine()
             ->getRepository(MarkdownNote::class)
-            ->findBy(['userId' => $user->getId()]);
+            ->findBy(['userId' => $user]);
 
         $jsonResponse = $this->json($notes, 200, [], [
             'groups' => ['main'],
@@ -76,23 +63,68 @@ class NoteController extends AbstractController
         return $jsonResponse;
     }
 
-    public function deleteNoteByClientUuid(string $uuid, MarkdownNoteRepository $repo): JsonResponse
+    public function newNote(MarkdownNoteRepository $repo): JsonResponse
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
             throw new Exception('User is not logged in');
         }
 
-        $didDelete = $repo->delete($uuid, $user);
+        $noteEntity = $repo->new($user);
 
-        return new JsonResponse(null, ($didDelete ? 200 : 404));
+        return $this->json($noteEntity, 200, [], [
+            'groups' => ['main'],
+        ]);
     }
 
-    public function upsertNote(MarkdownNoteRepository $repo, Request $request): JsonResponse
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
+    public function getNoteByUuid(string $uuid): JsonResponse
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
             throw new Exception('User is not logged in');
+        }
+
+        if (Uuid::isValid($uuid) === false) {
+            throw new Exception('Invalid UUID provided');
+        }
+
+        $note = $this->getDoctrine()
+            ->getRepository(MarkdownNote::class)
+            ->findOneBy(['userId' => $user, 'uuid' => $uuid]);
+
+        return $this->json($note, 200, [], [
+            'groups' => ['main'],
+        ]);
+    }
+
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
+    public function deleteNoteByUuid(string $uuid, MarkdownNoteRepository $repo): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
+        if (Uuid::isValid($uuid) === false) {
+            throw new Exception('Invalid UUID provided');
+        }
+
+        $repo->delete($uuid, $user);
+
+        return new JsonResponse(null, Response::HTTP_OK);
+    }
+
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
+    public function upsertNote(string $uuid, MarkdownNoteRepository $repo, Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
+        if (Uuid::isValid($uuid) === false) {
+            throw new Exception('Invalid UUID provided');
         }
 
         $hydrator = new NoteHydrator();
@@ -102,7 +134,7 @@ class NoteController extends AbstractController
             throw new Exception("Could not hydrate note with given JSON:\n{$noteJsonString}");
         }
 
-        $noteEntity = $repo->upsert($note, $user);
+        $noteEntity = $repo->upsert($uuid, $note, $user);
 
         return $this->json($noteEntity, 200, [], [
             'groups' => ['main'],

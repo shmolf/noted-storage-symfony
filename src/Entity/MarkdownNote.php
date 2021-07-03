@@ -13,8 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=MarkdownNoteRepository::class)
  * @UniqueEntity(
- *      fields={"user_id","client_uuid"},
- *      message="Each user will have a their own set of unique client-side uuids."
+ *      fields={"user_id","uuid"},
+ *      message="Each user will have a their own set of unique uuids."
  * )
  */
 class MarkdownNote
@@ -72,13 +72,7 @@ class MarkdownNote
     /**
      * @ORM\Column(type="guid", unique=true)
      */
-    private string $noteUuid;
-
-    /**
-     * @ORM\Column(type="guid", nullable=true)
-     * @Groups("main")
-     */
-    private ?string $clientUuid;
+    private string $uuid;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
@@ -202,26 +196,14 @@ class MarkdownNote
         return $this;
     }
 
-    public function getNoteUuid(): ?string
+    public function getUuid(): ?string
     {
-        return $this->noteUuid;
+        return $this->uuid;
     }
 
-    public function setNoteUuid(string $noteUuid): self
+    public function setUuid(string $uuid): self
     {
-        $this->noteUuid = $noteUuid;
-
-        return $this;
-    }
-
-    public function getClientUuid(): ?string
-    {
-        return $this->clientUuid;
-    }
-
-    public function setClientUuid(?string $clientUuid): self
-    {
-        $this->clientUuid = $clientUuid;
+        $this->uuid = $uuid;
 
         return $this;
     }
