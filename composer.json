@@ -88,8 +88,9 @@
             "bin/console lint:container"
         ],
         "analysis" : [
+            "@phpmd",
             "@psalm",
-            "@phpmd"
+            "@psalm --taint-analysis"
         ],
         "psalm": "psalm -c psalm.xml",
         "psalm-clear": "psalm --clear-cache",
@@ -98,7 +99,7 @@
         "all-checks": [
             "@lint",
             "@analysis",
-            "test"
+            "@test"
         ]
     },
     "conflict": {

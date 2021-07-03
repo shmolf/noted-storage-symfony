@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\AppToken;
 use App\Entity\User;
+use App\Repository\AppTokenRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -36,10 +37,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function loadUserByUsername($authToken): ?User
+    /**
+     * The user is identified by their app token, so `$username` is actually a token
+     */
+    public function loadUserByUsername($username): ?User
     {
         /** @var AppToken */
-        $appToken = $this->_em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $authToken]);
+        /** @psalm-suppress UndefinedClass */
+        $appToken = $this->_em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $username]);
 
         return $appToken instanceof AppToken ? $appToken->getUser() : null;
     }

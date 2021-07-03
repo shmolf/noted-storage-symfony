@@ -35,10 +35,18 @@ class OAuthController extends AbstractController
         $this->csrfTokenManager = $csrfTokenManager;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function appTokenList(): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
         $appTokens = array_reduce(
-            $this->getUser()->getAppTokens()->toArray(),
+            $user->getAppTokens()->toArray(),
             fn(array $tokens, AppToken $token) => QoL::arrPush($tokens, new AppTokenDto($token)),
             /** @var AppTokenDto[] */
             []
@@ -50,6 +58,9 @@ class OAuthController extends AbstractController
         ]);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function createAppToken(Request $request, TokenAuthority $tokenAuthority): Response
     {
         $crsfToken = $request->request->get('_csrf_token');
@@ -69,7 +80,12 @@ class OAuthController extends AbstractController
             return $this->redirectToRoute('account.oauth.app.list', [], Response::HTTP_TEMPORARY_REDIRECT);
         }
 
-        $tokenEntity = $tokenAuthority->createToken($this->getUser(), $tokenName, $tokenExpiration);
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
+        $tokenEntity = $tokenAuthority->createToken($user, $tokenName, $tokenExpiration);
 
         return $this->render('account/new-app-token.html.twig', [
             'name' => $tokenEntity->getName(),
@@ -79,11 +95,16 @@ class OAuthController extends AbstractController
 
     public function deleteAppToken(string $uuid): JsonResponse
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
         /** @var AppToken|false */
-        $token = $this->getUser()->getAppTokens()->filter(fn(AppToken $token) => $token->getUuid() === $uuid)->first();
+        /** @psalm-suppress UnnecessaryVarAnnotation */
+        $token = $user->getAppTokens()->filter(fn(AppToken $token) => $token->getUuid() === $uuid)->first();
 
         if ($token instanceof AppToken) {
-            $user = $token->getUser();
             $user->removeAppToken($token);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
@@ -105,8 +126,6 @@ class OAuthController extends AbstractController
                 ->setErrors(['User is not logged in']);
         }
 
-        $authenticatedUser->setApiToken('this is terrible');
-
         try {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($authenticatedUser);
@@ -122,7 +141,7 @@ class OAuthController extends AbstractController
 
         return new JsonResponse(
             [
-                'access_token' => $authenticatedUser->getApiToken(),
+                'access_token' => 'fake token',
                 'token_type' => 'bearer',
             ],
             200,

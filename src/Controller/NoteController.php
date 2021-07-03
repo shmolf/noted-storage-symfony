@@ -78,13 +78,23 @@ class NoteController extends AbstractController
 
     public function deleteNoteByClientUuid(string $uuid, MarkdownNoteRepository $repo): JsonResponse
     {
-        $didDelete = $repo->delete($uuid, $this->getUser());
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
+        $didDelete = $repo->delete($uuid, $user);
 
         return new JsonResponse(null, ($didDelete ? 200 : 404));
     }
 
     public function upsertNote(MarkdownNoteRepository $repo, Request $request): JsonResponse
     {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new Exception('User is not logged in');
+        }
+
         $hydrator = new NoteHydrator();
         $noteJsonString = $request->getContent();
         $note = $hydrator->getHydratedNote($noteJsonString);
@@ -92,7 +102,7 @@ class NoteController extends AbstractController
             throw new Exception("Could not hydrate note with given JSON:\n{$noteJsonString}");
         }
 
-        $noteEntity = $repo->upsert($note, $this->getUser());
+        $noteEntity = $repo->upsert($note, $user);
 
         return $this->json($noteEntity, 200, [], [
             'groups' => ['main'],

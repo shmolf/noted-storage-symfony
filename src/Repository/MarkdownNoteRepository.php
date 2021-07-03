@@ -16,8 +16,6 @@ use shmolf\NotedHydrator\Entity\NoteEntity as ClientNoteEntity;
 /**
  * @method MarkdownNote|null find($id, $lockMode = null, $lockVersion = null)
  * @method MarkdownNote|null findOneBy(array $criteria, array $orderBy = null)
- * @method MarkdownNote[]    findAll()
- * @method MarkdownNote[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MarkdownNoteRepository extends ServiceEntityRepository
 {
@@ -68,7 +66,7 @@ class MarkdownNoteRepository extends ServiceEntityRepository
             ?? $this->findOneBy(['userId' => $userId, 'clientUuid' => $noteData->clientUuid])
             ?? new MarkdownNote();
 
-        $noteEntity->setUserId($user);
+        $noteEntity->setUser($user);
         $noteEntity->setTitle($noteData->title);
         $noteEntity->setContent($noteData->content);
         $noteEntity->setInTrashcan($noteData->inTrashcan);
@@ -78,7 +76,10 @@ class MarkdownNoteRepository extends ServiceEntityRepository
             $noteEntity->setNoteUuid(Uuid::uuid4()->toString());
         }
 
-        $noteEntity->setClientUuid($noteData->clientUuid ?? $noteEntity->getNoteUuid());
+        $noteEntity->setClientUuid($noteData->clientUuid === null
+            ? $noteEntity->getNoteUuid()
+            : $noteData->clientUuid->toString()
+        );
 
         $now = new DateTime();
         $noteEntity->setLastModified($now);

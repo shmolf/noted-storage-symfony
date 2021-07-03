@@ -49,11 +49,13 @@ class ExceptionListener
         $response = new Response();
 
         if ($exception instanceof HttpExceptionInterface) {
-            $response->setStatusCode($exception->getStatusCode());
             $response->headers->replace($exception->getHeaders());
-        } else {
-            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+
+        $response->setStatusCode($exception instanceof HttpExceptionInterface
+            ? $exception->getStatusCode()
+            : Response::HTTP_INTERNAL_SERVER_ERROR
+        );
 
         $additionalInfo = $exception instanceof ErrorList ? join(', ', $exception->getErrors()) : '';
 

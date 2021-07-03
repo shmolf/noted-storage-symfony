@@ -6,6 +6,7 @@ use App\Controller\SecurityController;
 use App\Exception\AppTokenException;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -95,9 +96,14 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
                 ->setErrors(['Redirect URL was invalid', $redirect]);
         }
 
+        $user = $token->getUser();
+        if (!$user instanceof UserInterface) {
+            throw new Exception('Expected `UserInterface`, found a string');
+        }
+
         $tokenName = parse_url($redirectUrl, PHP_URL_HOST);
         $tokenAuthority = new TokenAuthority($this->entityManager);
-        $tokenEntity = $tokenAuthority->createToken($token->getUser(), $tokenName, null);
+        $tokenEntity = $tokenAuthority->createToken($user, $tokenName, null);
 
         $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getAuthorizationToken());
 

@@ -22,6 +22,9 @@ class TokenAuthority
         $this->em = $em;
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function createToken(UserInterface $user, string $tokenName, ?DateTime $tokenExpiration): AppToken
     {
         $now = new DateTime();
@@ -30,9 +33,11 @@ class TokenAuthority
             ->setName($tokenName)
             ->setExpirationDate($tokenExpiration)
             ->setCreatedDate($now)
-            ->setUser($user)
             ->setUuid(Uuid::uuid4()->toString())
             ->setAuthorizationToken(Random::createString(42, [Random::ALPHA_NUM]));
+
+        /** @psalm-suppress ArgumentTypeCoercion */
+        $tokenEntity->setUser($user);
 
         try {
             $this->em->persist($tokenEntity);

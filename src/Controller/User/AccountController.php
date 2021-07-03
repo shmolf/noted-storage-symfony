@@ -38,54 +38,6 @@ class AccountController extends AbstractController
         return $this->render('account/edit.html.twig', ['user' => $this->getUser()]);
     }
 
-    public function saveOld(Request $request): Response
-    {
-        $requestData = $request->request->all();
-        $email = UserInputStrings::trimMb4String($requestData['email'] ?? '');
-        $password = isset($requestData['password']) ? $requestData['password'] : null;
-        $errors = [];
-
-        if (mb_strlen($email) === 0 || preg_match(UserInputStrings::REGEX_EMAIL, $email) !== 1) {
-            $errors[] = 'Email is invalid';
-        } elseif (mb_strlen($password ?? '') === 0 || preg_match(UserInputStrings::REGEX_PASSWORD, $password) !== 1) {
-            $errors[] = 'Password is invalid';
-        }
-
-        /** @var User|null */
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([ 'email' => $email ]);
-        $authenticatedUser = $this->getUser();
-
-        if ($authenticatedUser === null) {
-            $errors[] = 'User is not logged in';
-        } elseif ($user !== null && $user->getEmail() !== $authenticatedUser->email) {
-            $errors[] = 'User already exists';
-        }
-
-        if (count($errors) > 0) {
-            throw (new UserCreationException(Response::HTTP_BAD_REQUEST, 'There was an error with provided inputs'))
-                ->setErrors($errors);
-        }
-
-        $entityManager = $this->getDoctrine()->getManager();
-
-        $authenticatedUser->setEmail($email);
-        $authenticatedUser->setPassword($this->passwordEncoder->encodePassword($authenticatedUser, $password));
-
-        try {
-            $entityManager->persist($authenticatedUser);
-            $entityManager->flush();
-            $entityManager->clear();
-        } catch (Exception $e) {
-            $error = $authenticatedUser !== null && in_array('ROLE_ADMIN', $authenticatedUser->getRoles())
-                ? $e->getMessage()
-                : "There was a problem saving the user: {$email}";
-            throw (new UserCreationException(Response::HTTP_BAD_REQUEST, 'There was an error with provided inputs', $e))
-                ->setErrors([$error]);
-        }
-
-        return $this->redirectToRoute('login');
-    }
-
     public function save(Request $request): Response
     {
         $input = $this->parseInputs($request);
@@ -106,6 +58,7 @@ class AccountController extends AbstractController
         }
 
         /** @var User|null */
+        /** @psalm-suppress UnnecessaryVarAnnotation */
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy([ 'email' => $input['email'] ]);
         $authenticatedUser = $this->getUser();
 
@@ -141,6 +94,8 @@ class AccountController extends AbstractController
 
     /**
      * @return array{ email: ?non-falsy-string, password: ?string, csrf_token: ?string }
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function parseInputs(Request $request): array
     {

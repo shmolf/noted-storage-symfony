@@ -17,23 +17,23 @@ class NoteTag
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="noteTags")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $userId;
+    private User $user;
 
     /**
      * @ORM\ManyToMany(targetEntity=MarkdownNote::class, mappedBy="tags")
      */
-    private $markdownNotes;
+    private Collection $markdownNotes;
 
     public function __construct()
     {
@@ -57,20 +57,22 @@ class NoteTag
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): self
+    public function setUserId(User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
      * @return Collection|MarkdownNote[]
+     *
+     * @psalm-return Collection<array-key, MarkdownNote>
      */
     public function getMarkdownNotes(): Collection
     {
