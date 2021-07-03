@@ -96,6 +96,8 @@ class RegistrationController extends AbstractController
 
     /**
      * @return array{ email: ?non-falsy-string, password: ?string, csrf_token: ?string }
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     private function parseInputs(Request $request): array
     {

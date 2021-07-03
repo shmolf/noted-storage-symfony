@@ -60,7 +60,11 @@
                 <tr class="token-record" data-url="{{ path('account.oauth.app.delete', {'uuid': token.uuid}) }}">
                     <td>{{ token.name }}</td>
                     <td><time>{{ token.created|date('Y-m-d H:i:s') }}</time></td>
-                    <td><time>{{ token.expires|date('Y-m-d H:i:s')|default('forever') }}</time></td>
+                    {% set expiration = token.expires is not null
+                        ? token.expires|date('Y-m-d H:i:s')
+                        : 'never'
+                    %}
+                    <td><time>{{ expiration }}</time></td>
                     {% set lastAccess = token.lastAccess is not null
                         ? token.lastAccess|date('Y-m-d H:i:s')
                         : 'not used yet'

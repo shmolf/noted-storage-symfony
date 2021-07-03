@@ -84,10 +84,8 @@ footer.page-footer {
   display: none !important;
 }
 
-input {
-  &[type="text"]:not(.select-dropdown), &[type="email"], &[type="password"] {
-    color: var(--color-2);
-  }
+input:not(.select-dropdown) {
+  color: var(--color-2);
 }
 
 .input-field .helper-text {

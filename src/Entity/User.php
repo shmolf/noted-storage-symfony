@@ -160,7 +160,8 @@ class User implements UserInterface
 
     /**
      * @return Collection|AppToken[]
-     * @psalm-return Collection
+     *
+     * @psalm-return Collection<array-key, AppToken>
      */
     public function getAppTokens(): Collection
     {
@@ -191,6 +192,8 @@ class User implements UserInterface
 
     /**
      * @return Collection|MarkdownNote[]
+     *
+     * @psalm-return Collection<array-key, MarkdownNote>
      */
     public function getMarkdownNotes(): Collection
     {
@@ -201,7 +204,7 @@ class User implements UserInterface
     {
         if (!$this->markdownNotes->contains($markdownNote)) {
             $this->markdownNotes[] = $markdownNote;
-            $markdownNote->setUserId($this);
+            $markdownNote->setUser($this->id);
         }
 
         return $this;
@@ -209,18 +212,15 @@ class User implements UserInterface
 
     public function removeMarkdownNote(MarkdownNote $markdownNote): self
     {
-        if ($this->markdownNotes->removeElement($markdownNote)) {
-            // set the owning side to null (unless already changed)
-            if ($markdownNote->getUserId() === $this) {
-                $markdownNote->setUserId(null);
-            }
-        }
+        $this->markdownNotes->removeElement($markdownNote);
 
         return $this;
     }
 
     /**
      * @return Collection|NoteTag[]
+     *
+     * @psalm-return Collection<array-key, NoteTag>
      */
     public function getNoteTags(): Collection
     {
@@ -239,12 +239,7 @@ class User implements UserInterface
 
     public function removeNoteTag(NoteTag $noteTag): self
     {
-        if ($this->noteTags->removeElement($noteTag)) {
-            // set the owning side to null (unless already changed)
-            if ($noteTag->getUserId() === $this) {
-                $noteTag->setUserId(null);
-            }
-        }
+        $this->noteTags->removeElement($noteTag);
 
         return $this;
     }

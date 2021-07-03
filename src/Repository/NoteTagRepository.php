@@ -9,8 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method NoteTag|null find($id, $lockMode = null, $lockVersion = null)
  * @method NoteTag|null findOneBy(array $criteria, array $orderBy = null)
- * @method NoteTag[]    findAll()
- * @method NoteTag[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class NoteTagRepository extends ServiceEntityRepository
 {

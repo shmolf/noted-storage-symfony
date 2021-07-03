@@ -23,71 +23,62 @@ class MarkdownNote
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=16777215, nullable=true)
      * @Groups("main")
-     * @var string
      */
-    private $content;
+    private ?string $content;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("main")
-     * @var string
      */
-    private $title;
+    private ?string $title;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="markdownNotes")
      * @ORM\JoinColumn(nullable=false)
-     * @var int
      */
-    private $userId;
+    private User $user;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups("main")
-     * @var DateTimeInterface
      */
-    private $createdDate;
+    private DateTimeInterface $createdDate;
 
     /**
      * @ORM\Column(type="datetime")
      * @Groups("main")
-     * @var DateTimeInterface
      */
-    private $lastModified;
+    private DateTimeInterface $lastModified;
 
     /**
      * @ORM\ManyToMany(targetEntity=NoteTag::class, inversedBy="markdownNotes")
      * @Groups("main")
-     * @var Collection<NoteTag>
+     * @var Collection<array-key, NoteTag>
      */
     private $tags;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
      * @Groups("main")
-     * @var bool
      */
-    private $inTrashcan;
+    private bool $inTrashcan;
 
     /**
      * @ORM\Column(type="guid", unique=true)
-     * @var string
      */
-    private $noteUuid;
+    private string $noteUuid;
 
     /**
      * @ORM\Column(type="guid", nullable=true)
      * @Groups("main")
-     * @var string
      */
-    private $clientUuid;
+    private ?string $clientUuid;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
@@ -128,14 +119,14 @@ class MarkdownNote
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): self
+    public function setUser(User $userId): self
     {
-        $this->userId = $userId;
+        $this->user = $userId;
 
         return $this;
     }
@@ -166,6 +157,8 @@ class MarkdownNote
 
     /**
      * @return Collection|NoteTag[]
+     *
+     * @psalm-return Collection<array-key, NoteTag>
      */
     public function getTags(): Collection
     {

@@ -4,8 +4,9 @@ namespace App\Exception;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
-class UserModificationException extends HttpException implements ErrorList
+class UserModificationException extends HttpException implements ErrorList, Throwable
 {
     private array $errors;
 
@@ -24,7 +25,7 @@ class UserModificationException extends HttpException implements ErrorList
         return $this->errors;
     }
 
-    public function setErrors(array $errors): ErrorList
+    public function setErrors(array $errors): self
     {
         $this->errors = $errors;
 

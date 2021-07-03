@@ -4,8 +4,9 @@ namespace App\Exception;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
-class EntitySaveException extends HttpException
+class EntitySaveException extends HttpException implements Throwable
 {
     public function __construct(
         int $statusCode = 500,
