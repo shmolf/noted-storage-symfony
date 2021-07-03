@@ -26,5 +26,6 @@ account:
   prefix: /account
 
 api:
+  utf8: true
   resource: 'routes/api/routes.yaml'
-  prefix: /api
+  prefix: /🔌

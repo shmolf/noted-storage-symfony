@@ -1,3 +1,3 @@
-api.notes.get.list:
-  path: /notes/get/list
-  controller: App\Controller\NoteController::getNoteList
+api.v1:
+  resource: 'v1/routes.yaml'
+  prefix: /v1
