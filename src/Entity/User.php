@@ -47,12 +47,12 @@ class User implements UserInterface
     private $appTokens;
 
     /**
-     * @ORM\OneToMany(targetEntity=MarkdownNote::class, mappedBy="userId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=MarkdownNote::class, mappedBy="user", orphanRemoval=true)
      */
     private $markdownNotes;
 
     /**
-     * @ORM\OneToMany(targetEntity=NoteTag::class, mappedBy="userId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=NoteTag::class, mappedBy="user", orphanRemoval=true)
      */
     private $noteTags;
 
@@ -231,7 +231,7 @@ class User implements UserInterface
     {
         if (!$this->noteTags->contains($noteTag)) {
             $this->noteTags[] = $noteTag;
-            $noteTag->setUserId($this);
+            $noteTag->setUser($this);
         }
 
         return $this;

@@ -124,9 +124,9 @@ class MarkdownNote
         return $this->user;
     }
 
-    public function setUser(User $userId): self
+    public function setUser(User $user): self
     {
-        $this->user = $userId;
+        $this->user = $user;
 
         return $this;
     }
