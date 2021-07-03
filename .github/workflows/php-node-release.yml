@@ -1,8 +1,9 @@
 name: Noted Checks & Release
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:
+    branches:
+      - main
 
 jobs:
   build-php:
@@ -51,3 +52,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - run: npx yarn install --check-cache
+
+  release:
+    needs: verify-dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Install NPM Packages
+        if: steps.npm-cache.outputs.cache-hit != 'true'
+        run: npx yarn install --check-cache
+
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npx yarn semantic-release
