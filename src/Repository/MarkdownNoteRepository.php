@@ -95,7 +95,7 @@ class MarkdownNoteRepository extends ServiceEntityRepository
                 ->findOneBy(['userId' => $userId, 'name' => $tag])
                 ?? new NoteTag();
             $noteTag->addMarkdownNote($noteEntity);
-            $noteTag->setUserId($user);
+            $noteTag->setUser($user);
 
             if ($noteTag->getName() === null) {
                 $noteTag->setName($tag);
