@@ -47,13 +47,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-AUTH-TOKEN",
-						"value": "{{X-AUTH-TOKEN}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{HOST}}/🔌/v1/note/list",
 					"host": [
@@ -65,7 +59,8 @@
 						"note",
 						"list"
 					]
-				}
+				},
+				"description": "Fetches a list of all the Notes associated with the user who owns the Access Token."
 			},
 			"response": []
 		},
@@ -91,13 +86,7 @@
 			],
 			"request": {
 				"method": "POST",
-				"header": [
-					{
-						"key": "X-AUTH-TOKEN",
-						"value": "{{X-AUTH-TOKEN}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{HOST}}/🔌/v1/note/new",
 					"host": [
@@ -109,7 +98,8 @@
 						"note",
 						"new"
 					]
-				}
+				},
+				"description": "Generates a new, empty note."
 			},
 			"response": []
 		},
@@ -149,13 +139,7 @@
 			],
 			"request": {
 				"method": "GET",
-				"header": [
-					{
-						"key": "X-AUTH-TOKEN",
-						"value": "{{X-AUTH-TOKEN}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{HOST}}/🔌/v1/note/uuid/{{NoteUuid}}",
 					"host": [
@@ -203,13 +187,7 @@
 			],
 			"request": {
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "X-AUTH-TOKEN",
-						"value": "{{X-AUTH-TOKEN}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "{{HOST}}/🔌/v1/note/uuid/{{NoteUuid}}",
 					"host": [
@@ -264,13 +242,7 @@
 			],
 			"request": {
 				"method": "PUT",
-				"header": [
-					{
-						"key": "X-AUTH-TOKEN",
-						"value": "{{X-AUTH-TOKEN}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"title\": \"☕ is tastey\",\r\n    \"content\": \"No, for realz, it makes me 🤯\",\r\n    \"tags\": [\r\n        \"coffee\",\r\n        \"good life\"\r\n    ]\r\n}",
@@ -302,7 +274,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "326g0rI63AMZi3Kqgx3o58splAkYiR27xaV3lctp3U",
+				"value": "{{X-AUTH-TOKEN}}",
 				"type": "string"
 			},
 			{
@@ -330,16 +302,6 @@
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "X-AUTH-TOKEN",
-			"value": "326g0rI63AMZi3Kqgx3o58splAkYiR27xaV3lctp3U"
-		},
-		{
-			"key": "NoteUuid",
-			"value": ""
 		}
 	]
 }
