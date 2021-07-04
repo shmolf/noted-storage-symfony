@@ -6,6 +6,7 @@ use App\Repository\NoteTagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NoteTagRepository::class)
@@ -21,6 +22,7 @@ class NoteTag
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("main")
      */
     private string $name;
 
@@ -47,7 +49,7 @@ class NoteTag
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name ?? null;
     }
 
     public function setName(string $name): self
