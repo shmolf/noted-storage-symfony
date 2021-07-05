@@ -24,7 +24,7 @@ class NoteTag
      * @ORM\Column(type="string", length=255)
      * @Groups("main")
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="noteTags")
@@ -49,7 +49,7 @@ class NoteTag
 
     public function getName(): ?string
     {
-        return $this->name ?? null;
+        return $this->name;
     }
 
     public function setName(string $name): self
