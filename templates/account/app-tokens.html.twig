@@ -15,7 +15,7 @@
 
 {% block body %}
     <div id="form-errors"></div>
-    <form method="post" id="generate-token" action="{{ path('account.oauth.app.new') }}">
+    <form method="post" id="generate-token" action="{{ path('oauth.app.new') }}">
         <div class="row">
             <div class="input-field col s12 m6">
                 {% set txtAppName = 'Application Name'|trans %}
@@ -57,7 +57,7 @@
             </tr>
         {% else %}
             {% for token in tokens %}
-                <tr class="token-record" data-url="{{ path('account.oauth.app.delete', {'uuid': token.uuid}) }}">
+                <tr class="token-record" data-url="{{ path('oauth.app.delete', {'uuid': token.uuid}) }}">
                     <td>{{ token.name }}</td>
                     <td><time>{{ token.created|date('Y-m-d H:i:s') }}</time></td>
                     {% set expiration = token.expires is not null

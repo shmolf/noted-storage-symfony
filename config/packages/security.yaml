@@ -31,10 +31,9 @@ security:
       # https://symfony.com/doc/current/security/impersonating_user.html
       # switch_user: true
     oauth:
-      pattern: ^/account/oauth/login
+      pattern: ^/㊙/
       anonymous: lazy
-      # logout:
-      #   path: account.oauth.login
+      logout: ~
       guard:
         entry_point: App\Security\OAuthLoginFormAuthenticator
         authenticators:
@@ -51,7 +50,8 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: '^/account/oauth', roles: [ IS_ANONYMOUS, IS_AUTHENTICATED_ANONYMOUSLY ]}
+    - { path: '^/oauth/(login|register)', roles: [ IS_ANONYMOUS, IS_AUTHENTICATED_ANONYMOUSLY ]}
+    - { path: '^/oauth', roles: [ IS_ANONYMOUS, IS_AUTHENTICATED_ANONYMOUSLY ]}
     - { path: '^/account/create', roles: [ IS_ANONYMOUS, IS_AUTHENTICATED_ANONYMOUSLY ]}
     - { path: '^/login', roles: [ IS_ANONYMOUS, IS_AUTHENTICATED_ANONYMOUSLY ]}
     - { path: '^/🔌', roles: ROLE_USER }

@@ -48,7 +48,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->attributes->get('_route') === 'account.oauth.login' && $request->isMethod('POST');
+        return $request->attributes->get('_route') === 'oauth.login' && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request): array
@@ -107,7 +107,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getAuthorizationToken());
 
-        return new RedirectResponse($this->router->generate('account.oauth.login.success'));
+        return new RedirectResponse($this->router->generate('oauth.login.success'));
     }
 
     protected function getLoginUrl(): string

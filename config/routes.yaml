@@ -29,3 +29,8 @@ api:
   utf8: true
   resource: 'routes/api/routes.yaml'
   prefix: /🔌
+
+oauth:
+  utf8: true
+  resource: 'routes/api/routes.yaml'
+  prefix: /㊙

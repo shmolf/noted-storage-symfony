@@ -77,7 +77,7 @@ class OAuthController extends AbstractController
         $tokenExpiration = empty($tokenExpiration) ? null : new DateTime($tokenExpiration);
 
         if (mb_strlen($tokenName) === 0) {
-            return $this->redirectToRoute('account.oauth.app.list', [], Response::HTTP_TEMPORARY_REDIRECT);
+            return $this->redirectToRoute('oauth.app.list', [], Response::HTTP_TEMPORARY_REDIRECT);
         }
 
         $user = $this->getUser();
