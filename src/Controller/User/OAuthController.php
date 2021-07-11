@@ -151,4 +151,12 @@ class OAuthController extends AbstractController
             ]
         );
     }
+
+    /**
+     * This function will check for a provided App token. If non provided, should redirect to the OAuth Login.
+     */
+    public function oAuthRegister(Request $request, TokenAuthority $tokenAuthority): Response
+    {
+
+    }
 }
