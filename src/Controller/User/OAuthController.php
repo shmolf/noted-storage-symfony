@@ -14,6 +14,7 @@ use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
@@ -157,6 +158,22 @@ class OAuthController extends AbstractController
      */
     public function oAuthRegister(Request $request, TokenAuthority $tokenAuthority): Response
     {
+        $appToken = $request->get('appToken');
+        $returnUrl = $request->get('returnUrl');
 
+        if ($appToken === null) {
+            return $this->redirectToRoute('oauth.login', ['returnUrl' =>$returnUrl]);
+        }
+
+        $user = $tokenAuthority->validateToken($appToken);
+
+        if ($user === null) {
+            return $this->redirectToRoute('oauth.login', ['returnUrl' =>$returnUrl]);
+        }
+
+        // From here, need to provide a refresh token, and an access token.
+        // Need to build new entities.
+
+        return new RedirectResponse($returnUrl);
     }
 }

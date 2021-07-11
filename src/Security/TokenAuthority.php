@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\AppToken;
+use App\Entity\User;
 use App\Exception\AppTokenException;
 use App\Utility\Random;
 use DateTime;
@@ -49,5 +50,11 @@ class TokenAuthority
         }
 
         return $tokenEntity;
+    }
+
+    public function validateToken(string $token): ?User
+    {
+        $appToken = $this->em->getRepository(AppToken::class)->findOneBy(['uuid' => $token]);
+        return $appToken === null ? null : $appToken->getUser();
     }
 }
