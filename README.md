@@ -26,6 +26,14 @@ authorization.
 
 [Documentation](docs/Docker.md)
 
+## Credits
+
+- [Nicholas Browning][link-author]
+- [All Contributors][link-contributors]
+
+## License
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
 [ico-license]: https://img.shields.io/github/license/shmolf/noted-storage-symfony?style=flat-square
 [ico-workflow-php]: https://github.com/shmolf/noted-storage-symfony/actions/workflows/php-node-release.yml/badge.svg?style=flat-square
 
