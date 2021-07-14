@@ -1,6 +1,6 @@
 [![Software License][ico-license]](LICENSE.md)
 [![PHP Composer][ico-workflow-php]][link-workflow-php]
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/shmolf/noted-storage-symfony)
 
 # noted-storage-symfony
 Symfony application for storing Note'd markdown notes
