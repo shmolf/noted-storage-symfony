@@ -1,3 +1,7 @@
+[![Software License][ico-license]](LICENSE.md)
+[![PHP Composer][ico-workflow-php]][link-workflow-php]
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/organization/repository)
+
 # noted-storage-symfony
 Symfony application for storing Note'd markdown notes
 
@@ -21,3 +25,10 @@ authorization.
 ## Docker
 
 [Documentation](docs/Docker.md)
+
+[ico-license]: https://img.shields.io/github/license/shmolf/noted-storage-symfony?style=flat-square
+[ico-workflow-php]: https://github.com/shmolf/noted-storage-symfony/actions/workflows/php-node-release.yml/badge.svg?style=flat-square
+
+[link-author]: https://github.com/shmolf
+[link-contributors]: ../../contributors
+[link-workflow-php]: https://github.com/shmolf/noted-storage-symfony/actions/workflows/php-node-release.yml
