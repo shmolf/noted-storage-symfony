@@ -20,16 +20,6 @@ Until I figure out how to `npm install` before `npm run dev`, it's broken out in
 And, need to run the `node-install` image first.
 ([reference](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093))
 
-**To run the Yarn Install independently**
-```bash
-docker-compose --env-file docker.env.local run --rm node-install
-```
-
-Can manually run the Doctrine Migration via
-```bash
-docker-compose --env-file docker.env.local run --rm php-doctrine-migrate
-```
-
 **To run the entire setup**
 - Make sure you've created a `docker.env.local` file, which'd be based on `docker.env`.
 ```bash
