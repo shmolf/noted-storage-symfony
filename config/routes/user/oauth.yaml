@@ -1,20 +1,3 @@
-oauth.app.list:
-  path: /app/list
-  controller: App\Controller\User\OAuthController::appTokenList
-  methods: GET
-
-oauth.app.new:
-  path: /app
-  controller: App\Controller\User\OAuthController::createAppToken
-  methods: POST
-
-oauth.app.delete:
-  path: /app/{uuid}
-  controller: App\Controller\User\OAuthController::deleteAppToken
-  methods: DELETE
-  requirements:
-    uuid: '[a-fA-F0-9\-]+'
-
 oauth.login:
   path: /login
   controller: App\Controller\SecurityController::oAuthLogin
