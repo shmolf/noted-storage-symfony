@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Security\TokenAuthority;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -40,15 +42,33 @@ class SecurityController extends AbstractController
             $request->getSession()->invalidate();
         }
 
-        $redirect = $request->query->get('redirect') ?? $request->headers->get('referer');
+        $redirect = $request->query->get('returnUrl') ?? $request->headers->get('referer');
 
         if ($redirect === null) {
             throw new Exception('Missing redirect on successful login');
         }
 
+        $request->getSession()->set('returnUrl', $redirect);
+
         return $this->render('security/oauth-login.html.twig', [
             'crsfId' => self::CRSF_LOGIN_OAUTH_TKN,
-            'redirect' => $redirect,
         ]);
+    }
+
+    public function oAuthLoginSuccess(Request $request): Response
+    {
+        $returnUrl = $request->getSession()->get('returnUrl');
+
+        if ($returnUrl === null) {
+            throw new Exception('Missing redirect on successful login');
+        }
+
+        $appToken = $request->getSession()->get(TokenAuthority::SESSION_OAUTH_APP_TOKEN);
+
+        return new RedirectResponse(
+            $returnUrl,
+            Response::HTTP_FOUND,
+            [TokenAuthority::HEADER_APP_TOKEN => $appToken]
+        );
     }
 }

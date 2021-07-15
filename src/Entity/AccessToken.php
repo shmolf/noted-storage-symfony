@@ -35,7 +35,7 @@ class AccessToken
     private ?AppToken $appToken = null;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=510)
      */
     private string $token;
 

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AppTokenRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,9 +21,9 @@ class AppToken
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=510)
      */
-    private $authorizationToken;
+    private $token;
 
     /**
      * @ORM\Column(type="datetime")
@@ -76,48 +77,48 @@ class AppToken
         return $this->id;
     }
 
-    public function getAuthorizationToken(): ?string
+    public function getToken(): ?string
     {
-        return $this->authorizationToken;
+        return $this->token;
     }
 
-    public function setAuthorizationToken(string $authorizationToken): self
+    public function setToken(string $token): self
     {
-        $this->authorizationToken = $authorizationToken;
+        $this->token = $token;
 
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getCreatedDate(): ?DateTimeInterface
     {
         return $this->createdDate;
     }
 
-    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    public function setCreatedDate(DateTimeInterface $createdDate): self
     {
         $this->createdDate = $createdDate;
 
         return $this;
     }
 
-    public function getExpirationDate(): ?\DateTimeInterface
+    public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(?\DateTimeInterface $expirationDate): self
+    public function setExpirationDate(?DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
         return $this;
     }
 
-    public function getLastAccessDate(): ?\DateTimeInterface
+    public function getLastAccessDate(): ?DateTimeInterface
     {
         return $this->lastAccessDate;
     }
 
-    public function setLastAccessDate(?\DateTimeInterface $lastAccessDate): self
+    public function setLastAccessDate(?DateTimeInterface $lastAccessDate): self
     {
         $this->lastAccessDate = $lastAccessDate;
 

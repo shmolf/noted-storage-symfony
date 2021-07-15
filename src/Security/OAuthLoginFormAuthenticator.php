@@ -88,7 +88,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TokenInterface $token,
         $providerKey
     ): Response {
-        $redirect = $request->query->get('redirect');
+        $redirect = $request->getSession()->get('returnUrl', '');
         $redirectUrl = filter_var($redirect, FILTER_SANITIZE_URL);
 
         if ($redirectUrl === false) {
@@ -105,7 +105,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $tokenAuthority = new TokenAuthority($this->entityManager);
         $tokenEntity = $tokenAuthority->createToken($user, $tokenName, null);
 
-        $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getAuthorizationToken());
+        $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getToken());
 
         return new RedirectResponse($this->router->generate('oauth.login.success'));
     }

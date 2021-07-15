@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class TokenAuthority
 {
     public const SESSION_OAUTH_APP_TOKEN = 'oauth-generated-app-token';
+    public const HEADER_APP_TOKEN = 'X-AUTH-TOKEN';
+
     private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -35,7 +37,7 @@ class TokenAuthority
             ->setExpirationDate($tokenExpiration)
             ->setCreatedDate($now)
             ->setUuid(Uuid::uuid4()->toString())
-            ->setAuthorizationToken(Random::createString(42, [Random::ALPHA_NUM]));
+            ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
 
         /** @psalm-suppress ArgumentTypeCoercion */
         $tokenEntity->setUser($user);
@@ -54,7 +56,7 @@ class TokenAuthority
 
     public function validateToken(string $token): ?User
     {
-        $appToken = $this->em->getRepository(AppToken::class)->findOneBy(['uuid' => $token]);
+        $appToken = $this->em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $token]);
         return $appToken === null ? null : $appToken->getUser();
     }
 }

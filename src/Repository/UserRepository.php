@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\AppToken;
 use App\Entity\User;
-use App\Repository\AppTokenRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;

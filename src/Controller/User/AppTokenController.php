@@ -87,7 +87,7 @@ class AppTokenController extends AbstractController
 
         return $this->render('account/new-app-token.html.twig', [
             'name' => $tokenEntity->getName(),
-            'token' => $tokenEntity->getAuthorizationToken(),
+            'token' => $tokenEntity->getToken(),
         ]);
     }
 
