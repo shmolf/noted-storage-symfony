@@ -29,15 +29,15 @@ class AccessToken
     private DateTimeInterface $expirationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity=AppToken::class, inversedBy="accessTokens")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private ?AppToken $appToken = null;
-
-    /**
      * @ORM\Column(type="string", length=510)
      */
     private string $token;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accessTokens")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function getId(): ?int
     {
@@ -68,18 +68,6 @@ class AccessToken
         return $this;
     }
 
-    public function getAppToken(): ?AppToken
-    {
-        return $this->appToken;
-    }
-
-    public function setAppToken(?AppToken $appToken): self
-    {
-        $this->appToken = $appToken;
-
-        return $this;
-    }
-
     public function getToken(): string
     {
         return $this->token;
@@ -88,6 +76,18 @@ class AccessToken
     public function setToken(string $token): self
     {
         $this->token = $token;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
