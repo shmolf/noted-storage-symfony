@@ -9,7 +9,7 @@ oauth.login.success:
 
 oauth.register:
   path: /register
-  controller: App\Controller\SecurityController::oAuthRegister
+  controller: App\Controller\User\OAuthController::oAuthRegister
   methods: GET
 
 oauth.login.old:
