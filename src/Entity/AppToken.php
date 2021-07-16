@@ -163,6 +163,8 @@ class AppToken
 
     /**
      * @return Collection|AccessToken[]
+     *
+     * @psalm-return Collection<array-key, AccessToken>
      */
     public function getAccessTokens(): Collection
     {
@@ -193,6 +195,8 @@ class AppToken
 
     /**
      * @return Collection|RefreshToken[]
+     *
+     * @psalm-return Collection<array-key, RefreshToken>
      */
     public function getRefreshTokens(): Collection
     {
