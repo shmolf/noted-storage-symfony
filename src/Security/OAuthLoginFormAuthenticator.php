@@ -89,24 +89,11 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TokenInterface $token,
         $providerKey
     ): Response {
-        $redirect = $request->getSession()->get('returnUrl', '');
-        $redirectUrl = filter_var($redirect, FILTER_SANITIZE_URL);
-
-        if ($redirectUrl === false) {
-            throw (new AppTokenException(Response::HTTP_BAD_REQUEST, 'There was an error with the provided redirect URL'))
-                ->setErrors(['Redirect URL was invalid', $redirect]);
-        }
-
         $user = $token->getUser();
+
         if (!$user instanceof UserInterface) {
             throw new Exception('Expected `UserInterface`, found a string');
         }
-
-        $tokenName = parse_url($redirectUrl, PHP_URL_HOST);
-        $tokenAuthority = new AppTokenAuthority($this->entityManager);
-        $tokenEntity = $tokenAuthority->createToken($user, $tokenName, null);
-
-        $request->getSession()->set(AppTokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getToken());
 
         return new RedirectResponse($this->router->generate('oauth.login.success'));
     }
