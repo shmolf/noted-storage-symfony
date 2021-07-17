@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\TokenAuthority\AppTokenAuthority;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return $request->headers->has(TokenAuthority::HEADER_APP_TOKEN);
+        return $request->headers->has(AppTokenAuthority::HEADER_APP_TOKEN);
     }
 
     /**
@@ -37,7 +38,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return $request->headers->get(TokenAuthority::HEADER_APP_TOKEN);
+        return $request->headers->get(AppTokenAuthority::HEADER_APP_TOKEN);
     }
 
     public function getUser($token, UserProviderInterface $userProvider): ?UserInterface

@@ -143,24 +143,4 @@ class AppToken implements Token
 
         return $this;
     }
-
-    /**
-     * @return Collection|AccessToken[]
-     *
-     * @psalm-return Collection<array-key, AccessToken>
-     */
-    public function getAccessTokens(): Collection
-    {
-        return $this->accessTokens;
-    }
-
-    /**
-     * @return Collection|RefreshToken[]
-     *
-     * @psalm-return Collection<array-key, RefreshToken>
-     */
-    public function getRefreshTokens(): Collection
-    {
-        return $this->refreshTokens;
-    }
 }

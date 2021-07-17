@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @method MarkdownNote|null find($id, $lockMode = null, $lockVersion = null)
  * @method MarkdownNote|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MarkdownNote[]    findAll()
+ * @method MarkdownNote[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MarkdownNoteRepository extends ServiceEntityRepository
 {

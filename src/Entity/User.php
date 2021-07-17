@@ -258,6 +258,8 @@ class User implements UserInterface
 
     /**
      * @return Collection|RefreshToken[]
+     *
+     * @psalm-return Collection<array-key, RefreshToken>
      */
     public function getRefreshTokens(): Collection
     {
@@ -288,6 +290,8 @@ class User implements UserInterface
 
     /**
      * @return Collection|AccessToken[]
+     *
+     * @psalm-return Collection<array-key, AccessToken>
      */
     public function getAccessTokens(): Collection
     {

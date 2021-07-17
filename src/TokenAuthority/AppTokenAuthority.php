@@ -53,10 +53,10 @@ class AppTokenAuthority implements TokenAuthority
         return $tokenEntity;
     }
 
-    public function validateToken(string $token): ?AppToken
+    public function validateToken(string $tokenString): ?AppToken
     {
         /** @var AppToken|null */
-        $appToken = $this->em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $token]);
-        return $appToken === null || $appToken->getExpirationDate() <= new DateTime() ? null : $appToken;
+        $token = $this->em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $tokenString]);
+        return $token === null || $token->getExpirationDate() <= new DateTime() ? null : $token;
     }
 }

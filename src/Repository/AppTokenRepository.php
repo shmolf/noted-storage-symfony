@@ -9,6 +9,8 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method AppToken|null find($id, $lockMode = null, $lockVersion = null)
  * @method AppToken|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AppToken[]    findAll()
+ * @method AppToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AppTokenRepository extends ServiceEntityRepository
 {
