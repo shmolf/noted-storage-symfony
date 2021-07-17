@@ -5,7 +5,7 @@ namespace App\Controller\User;
 use App\Dto\AppTokenDto;
 use App\Entity\AppToken;
 use App\Entity\User;
-use App\Security\TokenAuthority;
+use App\TokenAuthority\AppTokenAuthority;
 use App\Utility\QoL;
 use App\Utility\UserInputStrings;
 use DateTime;
@@ -59,7 +59,7 @@ class AppTokenController extends AbstractController
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function createAppToken(Request $request, TokenAuthority $tokenAuthority): Response
+    public function createAppToken(Request $request, AppTokenAuthority $tokenAuthority): Response
     {
         $crsfToken = $request->request->get('_csrf_token');
 

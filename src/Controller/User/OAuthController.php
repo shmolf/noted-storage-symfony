@@ -2,15 +2,14 @@
 
 namespace App\Controller\User;
 
-use App\Entity\RefreshToken;
+use App\Entity\AppToken;
 use App\Entity\User;
 use App\Exception\OAuthException;
 use App\Exception\UserModificationException;
-use App\Security\TokenAuthority;
+use App\TokenAuthority\AppTokenAuthority;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,9 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OAuthController extends AbstractController
 {
-    private const TOKEN_ACCESS_LIFESPAN = 3600; // 60 seconds X 60 minutes
-    private const TOKEN_REFRESH_LIFESPAN = 10800; // 60 seconds X 60 minutes X 3 hours
-
     public function generateOAuth(): Response
     {
         $authenticatedUser = $this->getUser();
@@ -60,29 +56,24 @@ class OAuthController extends AbstractController
     /**
      * This function will check for a provided App token. If non provided, should redirect to the OAuth Login.
      */
-    public function oAuthRegister(Request $request, TokenAuthority $tokenAuthority): Response
+    public function oAuthRegister(Request $request, AppTokenAuthority $tokenAuthority): Response
     {
-        $appToken = $request->get('appToken');
-        $returnUrl = $request->get('returnUrl');
+        $token = $request->get('appToken');
 
-        if ($appToken === null) {
-            return $this->redirectToRoute('oauth.login', ['returnUrl' => $returnUrl]);
+        if ($token === null) {
+            return $this->redirectToRoute('oauth.login');
         }
 
-        $user = $tokenAuthority->validateToken($appToken);
+        $appToken = $tokenAuthority->validateToken($token);
 
-        if ($user === null) {
-            return $this->redirectToRoute('oauth.login', ['returnUrl' => $returnUrl]);
+        if ($appToken instanceof AppToken) {
+            return $this->redirectToRoute('oauth.login.success');
         }
 
-        return new RedirectResponse(
-            $returnUrl,
-            Response::HTTP_FOUND,
-            [TokenAuthority::HEADER_APP_TOKEN => $appToken]
-        );
+        return $this->redirectToRoute('oauth.login');
     }
 
-    // public function getRefreshToken(Request $request, TokenAuthority $tokenAuthority): Response
+    // public function getRefreshToken(Request $request, AppTokenAuthority $tokenAuthority): Response
     // {
     //     $refreshToken = new RefreshToken();
     //     $refreshToken->setAppToken()
@@ -94,7 +85,7 @@ class OAuthController extends AbstractController
     //     ]);
     // }
 
-    // public function getAccessToken(Request $request, TokenAuthority $tokenAuthority): Response
+    // public function getAccessToken(Request $request, AppTokenAuthority $tokenAuthority): Response
     // {
     //     $refreshToken
     //     http_build_query([

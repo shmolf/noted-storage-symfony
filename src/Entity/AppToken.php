@@ -4,14 +4,13 @@ namespace App\Entity;
 
 use App\Repository\AppTokenRepository;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AppTokenRepository::class)
  */
-class AppToken
+class AppToken implements Token
 {
     /**
      * @ORM\Id
@@ -28,17 +27,17 @@ class AppToken
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdDate;
+    private ?DateTimeInterface $creationDate = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $expirationDate;
+    private ?DateTimeInterface $expirationDate = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastAccessDate;
+    private ?DateTimeInterface $lastAccessDate = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="appTokens")
@@ -55,22 +54,6 @@ class AppToken
      * @ORM\Column(type="string", length=255)
      */
     private $uuid;
-
-    /**
-     * @ORM\OneToMany(targetEntity=AccessToken::class, mappedBy="appToken", orphanRemoval=true)
-     */
-    private $accessTokens;
-
-    /**
-     * @ORM\OneToMany(targetEntity=RefreshToken::class, mappedBy="appToken", orphanRemoval=true)
-     */
-    private $refreshTokens;
-
-    public function __construct()
-    {
-        $this->accessTokens = new ArrayCollection();
-        $this->refreshTokens = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -89,14 +72,14 @@ class AppToken
         return $this;
     }
 
-    public function getCreatedDate(): ?DateTimeInterface
+    public function getCreationDate(): ?DateTimeInterface
     {
-        return $this->createdDate;
+        return $this->creationDate;
     }
 
-    public function setCreatedDate(DateTimeInterface $createdDate): self
+    public function setCreationDate(DateTimeInterface $creationDate): self
     {
-        $this->createdDate = $createdDate;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
@@ -171,28 +154,6 @@ class AppToken
         return $this->accessTokens;
     }
 
-    public function addAccessToken(AccessToken $accessToken): self
-    {
-        if (!$this->accessTokens->contains($accessToken)) {
-            $this->accessTokens[] = $accessToken;
-            $accessToken->setAppToken($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAccessToken(AccessToken $accessToken): self
-    {
-        if ($this->accessTokens->removeElement($accessToken)) {
-            // set the owning side to null (unless already changed)
-            if ($accessToken->getAppToken() === $this) {
-                $accessToken->setAppToken(null);
-            }
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|RefreshToken[]
      *
@@ -201,27 +162,5 @@ class AppToken
     public function getRefreshTokens(): Collection
     {
         return $this->refreshTokens;
-    }
-
-    public function addRefreshToken(RefreshToken $refreshToken): self
-    {
-        if (!$this->refreshTokens->contains($refreshToken)) {
-            $this->refreshTokens[] = $refreshToken;
-            $refreshToken->setAppToken($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRefreshToken(RefreshToken $refreshToken): self
-    {
-        if ($this->refreshTokens->removeElement($refreshToken)) {
-            // set the owning side to null (unless already changed)
-            if ($refreshToken->getAppToken() === $this) {
-                $refreshToken->setAppToken(null);
-            }
-        }
-
-        return $this;
     }
 }

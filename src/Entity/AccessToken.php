@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=AccessTokenRepository::class)
  */
-class AccessToken
+class AccessToken implements Token
 {
     /**
      * @ORM\Id
@@ -21,23 +21,23 @@ class AccessToken
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTimeInterface $creationDate;
+    private ?DateTimeInterface $creationDate = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTimeInterface $expirationDate;
+    private ?DateTimeInterface $expirationDate = null;
 
     /**
      * @ORM\Column(type="string", length=510)
      */
-    private string $token;
+    private ?string $token = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="accessTokens")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $user;
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -68,12 +68,12 @@ class AccessToken
         return $this;
     }
 
-    public function getToken(): string
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
-    public function setToken(string $token): self
+    public function setToken(?string $token): self
     {
         $this->token = $token;
 

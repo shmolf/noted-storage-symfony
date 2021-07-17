@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Security\TokenAuthority;
+use App\TokenAuthority\AccessTokenAuthority;
+use App\TokenAuthority\RefreshTokenAuthority;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -22,7 +22,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -42,33 +42,27 @@ class SecurityController extends AbstractController
             $request->getSession()->invalidate();
         }
 
-        $redirect = $request->query->get('returnUrl') ?? $request->headers->get('referer');
-
-        if ($redirect === null) {
-            throw new Exception('Missing redirect on successful login');
-        }
-
-        $request->getSession()->set('returnUrl', $redirect);
-
         return $this->render('security/oauth-login.html.twig', [
             'crsfId' => self::CRSF_LOGIN_OAUTH_TKN,
         ]);
     }
 
-    public function oAuthLoginSuccess(Request $request): Response
-    {
-        $returnUrl = $request->getSession()->get('returnUrl');
+    public function oAuthLoginSuccess(
+        RefreshTokenAuthority $refreshAuthority,
+        AccessTokenAuthority $acceessAuthority
+    ): Response {
+        $user = $this->getUser();
 
-        if ($returnUrl === null) {
-            throw new Exception('Missing redirect on successful login');
+        if ($user === null) {
+            throw new Exception('User is not authenticated');
         }
 
-        $appToken = $request->getSession()->get(TokenAuthority::SESSION_OAUTH_APP_TOKEN);
+        $refreshToken = $refreshAuthority->createToken($user);
+        $accessToken = $acceessAuthority->createToken($user);
 
-        return new RedirectResponse(
-            $returnUrl,
-            Response::HTTP_FOUND,
-            [TokenAuthority::HEADER_APP_TOKEN => $appToken]
-        );
+        return $this->render('security/oauth-success.html.twig', [
+            'refreshToken' => $refreshToken->getToken(),
+            'accessToken' => $accessToken->getToken(),
+        ]);
     }
 }

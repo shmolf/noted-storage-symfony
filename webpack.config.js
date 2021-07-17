@@ -31,6 +31,7 @@ Encore
     .addEntry('user-edit', './assets/scripts/user/edit.ts')
     .addEntry('password-visibility', './assets/scripts/inputs/password.ts')
     .addEntry('oauth-login', './assets/scripts/user/oauth-login.ts')
+    .addEntry('oauth-success', './assets/scripts/user/oauth-success.ts')
     .addEntry('app-token-list', './assets/scripts/user/tokens.ts')
     .addEntry('new-app-token', './assets/scripts/user/new-app-token.ts')
 

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=RefreshTokenRepository::class)
  */
-class RefreshToken
+class RefreshToken implements Token
 {
     /**
      * @ORM\Id
@@ -21,12 +21,12 @@ class RefreshToken
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTimeInterface $creationDate;
+    private ?DateTimeInterface $creationDate = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private DateTimeInterface $expirationDate;
+    private ?DateTimeInterface $expirationDate = null;
 
     /**
      * @ORM\Column(type="string", length=510)

@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Controller\SecurityController;
 use App\Exception\AppTokenException;
 use App\Repository\UserRepository;
+use App\TokenAuthority\AppTokenAuthority;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -102,10 +103,10 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         $tokenName = parse_url($redirectUrl, PHP_URL_HOST);
-        $tokenAuthority = new TokenAuthority($this->entityManager);
+        $tokenAuthority = new AppTokenAuthority($this->entityManager);
         $tokenEntity = $tokenAuthority->createToken($user, $tokenName, null);
 
-        $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getToken());
+        $request->getSession()->set(AppTokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getToken());
 
         return new RedirectResponse($this->router->generate('oauth.login.success'));
     }

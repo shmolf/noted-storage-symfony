@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Security;
+namespace App\TokenAuthority;
 
 use App\Entity\AppToken;
-use App\Entity\User;
 use App\Exception\AppTokenException;
 use App\Utility\Random;
 use DateTime;
@@ -13,7 +12,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TokenAuthority
+class AppTokenAuthority implements TokenAuthority
 {
     public const SESSION_OAUTH_APP_TOKEN = 'oauth-generated-app-token';
     public const HEADER_APP_TOKEN = 'X-AUTH-TOKEN';
@@ -35,7 +34,7 @@ class TokenAuthority
         $tokenEntity
             ->setName($tokenName)
             ->setExpirationDate($tokenExpiration)
-            ->setCreatedDate($now)
+            ->setCreationDate($now)
             ->setUuid(Uuid::uuid4()->toString())
             ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
 
