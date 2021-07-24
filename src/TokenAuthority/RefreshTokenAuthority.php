@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RefreshTokenAuthority implements TokenAuthority
 {
-    private const TOKEN_LIFESPAN = 10800; // 60 seconds X 60 minutes X 3 hours
+    private const TOKEN_LIFESPAN = 5184000; // 60 sec X 60 min X 24 hr X 60 days
 
     private EntityManagerInterface $em;
 
