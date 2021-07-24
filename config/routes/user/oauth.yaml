@@ -11,8 +11,3 @@ oauth.register:
   path: /register
   controller: App\Controller\User\OAuthController::oAuthRegister
   methods: GET
-
-oauth.login.old:
-  path: /login-old
-  controller: App\Controller\User\OAuthController::remoteLoginForm
-  methods: GET

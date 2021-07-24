@@ -5,9 +5,12 @@ namespace App\Security;
 use App\Controller\SecurityController;
 use App\Exception\AppTokenException;
 use App\Repository\UserRepository;
+use App\TokenAuthority\AccessTokenAuthority;
 use App\TokenAuthority\AppTokenAuthority;
+use App\TokenAuthority\RefreshTokenAuthority;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,10 +95,20 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $user = $token->getUser();
 
         if (!$user instanceof UserInterface) {
-            throw new Exception('Expected `UserInterface`, found a string');
+            throw new Exception('User not available');
         }
 
-        return new RedirectResponse($this->router->generate('oauth.login.success'));
+        $accessToken = (new AccessTokenAuthority($this->entityManager))->createToken($user);
+        $refreshToken = (new RefreshTokenAuthority($this->entityManager))->createToken($user);
+
+        if ($request->hasSession()) {
+            $request->getSession()->invalidate();
+        }
+
+        return new JsonResponse([
+            'refreshToken' => $refreshToken->getToken(),
+            'accessToken' => $accessToken->getToken(),
+        ]);
     }
 
     protected function getLoginUrl(): string

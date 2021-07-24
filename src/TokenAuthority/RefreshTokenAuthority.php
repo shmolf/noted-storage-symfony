@@ -3,6 +3,7 @@
 namespace App\TokenAuthority;
 
 use App\Entity\RefreshToken;
+use App\Entity\User;
 use App\Exception\RefreshTokenException;
 use App\Utility\Random;
 use DateTime;
@@ -37,13 +38,12 @@ class RefreshTokenAuthority implements TokenAuthority
             ->setCreationDate($now)
             ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
 
-        /** @psalm-suppress ArgumentTypeCoercion */
-        $tokenEntity->setUser($user);
+        $user->addRefreshToken($tokenEntity);
 
         try {
             $this->em->persist($tokenEntity);
+            $this->em->persist($user);
             $this->em->flush();
-            $this->em->clear();
         } catch (Exception $e) {
             throw (new RefreshTokenException(Response::HTTP_BAD_REQUEST, 'There was an error creating the token'))
                 ->setErrors(['There was an error creating the refresh token', $e->getMessage()]);

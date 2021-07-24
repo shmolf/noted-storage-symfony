@@ -2,18 +2,20 @@
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" class="active validate" required autofocus
         value="{{ username|default('') }}"
-        title="example@host.com" />
+        title="example@host.com"
+        autocomplete="username" />
     <span class="helper-text" data-error="Invalid Email" data-success="👍"></span>
 {% endmacro %}
 {% macro password(options = {}) %}
     {% set includeHelper = options.showHints|default(false) %}
     {% set isRequired = options.required is defined ? options.required : true %}
-    {% set criteria = '8 characters, including Uppercase, Lowercase, Numbers, and Symbols' %}
+    {% set criteria = '8 characters, including Uppercase, Lowercase, Numbers, and Symbols (supports unicode)' %}
 
     {{ encore_entry_link_tags('password-visibility') }}
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" {% if isRequired %}required{% endif %}
+        autocomplete="current-password"
     {% if includeHelper %}
         minlength="8"
         pattern="(?=.*\p{Ll}+)(?=.*\p{Lu}+)(?=.*(?:\p{P}|\p{S})+)(?=.*\p{Nd}+).{8,}"

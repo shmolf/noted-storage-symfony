@@ -61,14 +61,14 @@ class ExceptionListener
 
         if ($this->isDev()) {
             $additionalInfo .= <<<HTML
-            <p/>{$exception->getMessage()}</p>
+            <p>{$exception->getMessage()}</p>
             <pre>{$exception->getTraceAsString()}</pre>
             <hr />
             HTML;
         }
 
         $response->setContent(<<<HTML
-        Well 💩..., <i>there was an error</i>.
+        <p>Well 💩..., <i>there was an error</i>.</p>
         {$additionalInfo}
         HTML);
 

@@ -15,8 +15,9 @@
         <p>
             Access has been granted to the application. Please wait for this window to close.
         </p>
-        <input type="hidden" id="refresh-token" value="{{ refreshToken }}" />
-        <input type="hidden" id="access-token" value="{{ accessToken }}" />
+        <input id="refresh-token" type="hidden" value="{{ refreshToken }}" />
+        <input id="access-token" type="hidden" value="{{ accessToken }}" />
+        <input id="referrer" type="hidden" value="{{ referrer }}" />
     </main>
     {{ encore_entry_script_tags('oauth-success') }}
 </body>

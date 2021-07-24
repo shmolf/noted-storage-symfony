@@ -2,17 +2,20 @@ import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-window.addEventListener('message', (event: MessageEvent) => sendTokens(event.ports[0]), false);
+let pipe: MessagePort;
+let referrer: string;
+
+window.addEventListener('message', (event: MessageEvent) => sendTokens(), false);
+
+window.addEventListener('message', processWindowMessage, false);
+window.addEventListener('beforeunload', () => pipe.postMessage(JSON.stringify({ state: 'closing' })));
 
 window.addEventListener('DOMContentLoaded', () => {
+  referrer = (document.getElementById('referrer') as HTMLInputElement).value;
   M.AutoInit();
-
-  // See about extracting the referrer from the original request w/in the backend. And passing that to the JS.
-  // In this way, can reference an explicit referrer rather than a `*`
-  window.parent.postMessage('ready', '*');
 });
 
-function sendTokens(pipe: MessagePort) {
+function sendTokens() {
   const refreshTokenElem = document.getElementById('refresh-token') as HTMLInputElement;
   const refreshToken = refreshTokenElem.value;
   refreshTokenElem.parentElement?.removeChild(refreshTokenElem);
@@ -21,5 +24,58 @@ function sendTokens(pipe: MessagePort) {
   const accessToken = accessTokenElem.value;
   accessTokenElem.parentElement?.removeChild(accessTokenElem);
 
-  pipe.postMessage(JSON.stringify({ refreshToken, accessToken }));
+  const pkg = {
+    load: {
+      tokens: {refreshToken, accessToken },
+    },
+  };
+
+  pipe.postMessage(JSON.stringify(pkg));
+}
+
+function processWindowMessage(event: MessageEvent) {
+  if (new URL(event.origin).origin !== new URL(referrer).origin || !event.isTrusted) return;
+
+  const data = JSON.parse(event.data);
+  const load = data?.load ?? null;
+  const action = data?.action ?? null;
+  const state = data?.state ?? null;
+
+  switch (load) {
+    case 'pipe':
+      pipe = event.ports[0];
+      pipe.onmessage = processPipeMessage;
+      pipe.postMessage(JSON.stringify({ state: 'ready' }));
+      break;
+    default:
+  }
+
+  switch (action) {
+    default:
+  }
+
+  switch (state) {
+    default:
+  }
+}
+
+function processPipeMessage(event: MessageEvent) {
+  if (event.origin !== referrer) return;
+
+  const data = JSON.parse(event.data);
+  const load = data?.load ?? null;
+  const action = data?.action ?? null;
+  const state = data?.state ?? null;
+
+  switch (load) {
+    default:
+  }
+
+  switch (action) {
+    default:
+  }
+
+  switch (state) {
+    default:
+  }
 }

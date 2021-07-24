@@ -6,6 +6,7 @@ use App\TokenAuthority\AccessTokenAuthority;
 use App\TokenAuthority\RefreshTokenAuthority;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,19 +39,21 @@ class SecurityController extends AbstractController
 
     public function oAuthLogin(Request $request): Response
     {
-        // We don't want library computers to share sessions...
-        if ($request->hasSession()) {
-            $request->getSession()->invalidate();
-        }
+        $referrer = $request->server->get('HTTP_REFERER');
+        $request->getSession()->set('oauth-referrer', $referrer);
 
         return $this->render('security/oauth-login.html.twig', [
             'crsfId' => self::CRSF_LOGIN_OAUTH_TKN,
+            'referrer' => $referrer,
         ]);
     }
 
+    // This method is deprecated. Returning with a JSON response from the Authenticator.
+    // But, I want it committed at least, before removing.
     public function oAuthLoginSuccess(
+        Request $request,
         RefreshTokenAuthority $refreshAuthority,
-        AccessTokenAuthority $acceessAuthority
+        AccessTokenAuthority $accessAuthority
     ): Response {
         /** @var UserInterface */
         $user = $this->getUser();
@@ -59,12 +62,17 @@ class SecurityController extends AbstractController
             throw new Exception('User is not authenticated');
         }
 
+        $accessToken = $accessAuthority->createToken($user);
         $refreshToken = $refreshAuthority->createToken($user);
-        $accessToken = $acceessAuthority->createToken($user);
+
+        if ($request->hasSession()) {
+            $request->getSession()->invalidate();
+        }
 
         return $this->render('security/oauth-success.html.twig', [
             'refreshToken' => $refreshToken->getToken(),
             'accessToken' => $accessToken->getToken(),
+            'referrer' => $request->getSession()->get('oauth-referrer'),
         ]);
     }
 }
