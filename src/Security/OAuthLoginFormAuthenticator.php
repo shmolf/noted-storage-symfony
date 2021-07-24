@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\TokenAuthority\AccessTokenAuthority;
 use App\TokenAuthority\RefreshTokenAuthority;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -107,12 +108,12 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return new JsonResponse([
             'refreshToken' => [
                'token' => $refreshToken->getToken(),
-               'expiration' => $refreshToken->getExpirationDate()->format('Y-m-d H:i:s'),
+               'expiration' => ($refreshToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
                'uri' => $this->router->generate('oauth.token.refresh'),
             ],
             'accessToken' => [
                 'token' => $accessToken->getToken(),
-                'expiration' => $refreshToken->getExpirationDate()->format('Y-m-d H:i:s'),
+                'expiration' => ($accessToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
                 'uri' => $this->router->generate('oauth.token.access'),
             ],
         ]);
