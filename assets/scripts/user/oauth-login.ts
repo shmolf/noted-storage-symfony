@@ -28,7 +28,10 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('form-login')?.addEventListener('submit', (e) => {
     submittingForm = true;
     e.preventDefault();
-    verifyCreds().then((response) => sendTokens(response));
+    verifyCreds().then((response) => {
+      sendTokens(response);
+      pipe?.postMessage(JSON.stringify({ action: 'close' }));
+    });
   });
 });
 
