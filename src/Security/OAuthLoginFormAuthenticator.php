@@ -3,15 +3,13 @@
 namespace App\Security;
 
 use App\Controller\SecurityController;
-use App\Exception\AppTokenException;
+use App\Entity\User;
 use App\Repository\UserRepository;
 use App\TokenAuthority\AccessTokenAuthority;
-use App\TokenAuthority\AppTokenAuthority;
 use App\TokenAuthority\RefreshTokenAuthority;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -92,9 +90,10 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TokenInterface $token,
         $providerKey
     ): Response {
+        /** @var User */
         $user = $token->getUser();
 
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof User) {
             throw new Exception('User not available');
         }
 

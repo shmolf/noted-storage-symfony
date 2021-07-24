@@ -2,14 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\TokenAuthority\AccessTokenAuthority;
 use App\TokenAuthority\RefreshTokenAuthority;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -55,7 +54,7 @@ class SecurityController extends AbstractController
         RefreshTokenAuthority $refreshAuthority,
         AccessTokenAuthority $accessAuthority
     ): Response {
-        /** @var UserInterface */
+        /** @var User */
         $user = $this->getUser();
 
         if ($user === null) {

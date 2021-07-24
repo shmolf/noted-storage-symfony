@@ -10,7 +10,6 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class RefreshTokenAuthority implements TokenAuthority
 {
@@ -26,7 +25,7 @@ class RefreshTokenAuthority implements TokenAuthority
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function createToken(UserInterface $user): RefreshToken
+    public function createToken(User $user): RefreshToken
     {
         $now = new DateTime();
         $expiration = clone $now;
