@@ -11,3 +11,13 @@ oauth.register:
   path: /register
   controller: App\Controller\User\OAuthController::oAuthRegister
   methods: GET
+
+oauth.token.refresh:
+  path: /token/refresh
+  controller: App\Controller\User\OAuthController::getRefreshToken
+  methods: GET
+
+oauth.token.access:
+  path: /token/refresh
+  controller: App\Controller\User\OAuthController::getAccessToken
+  methods: GET
