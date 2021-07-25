@@ -3,10 +3,12 @@
 namespace App\Security;
 
 use App\Controller\SecurityController;
+use App\Entity\AccessToken;
+use App\Entity\RefreshToken;
 use App\Entity\User;
+use App\Repository\AccessTokenRepository;
+use App\Repository\RefreshTokenRepository;
 use App\Repository\UserRepository;
-use App\TokenAuthority\AccessTokenAuthority;
-use App\TokenAuthority\RefreshTokenAuthority;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -29,20 +31,17 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    private UserRepository $userRepository;
     private RouterInterface $router;
     private CsrfTokenManagerInterface $csrfTokenManager;
     private UserPasswordEncoderInterface $passwordEncoder;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
-        UserRepository $userRepository,
         RouterInterface $router,
         CsrfTokenManagerInterface $csrfTokenManager,
         UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $entityManager
     ) {
-        $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
@@ -78,7 +77,9 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        return $this->userRepository->findOneBy(['email' => $credentials['email']]);
+        /** @var UserRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        return $userRepository->findOneBy(['email' => $credentials['email']]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -98,8 +99,12 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new Exception('User not available');
         }
 
-        $accessToken = (new AccessTokenAuthority($this->entityManager))->createToken($user);
-        $refreshToken = (new RefreshTokenAuthority($this->entityManager))->createToken($user);
+        /** @var AccessTokenRepository */
+        $accessTokenRepo = $this->entityManager->getRepository(AccessToken::class);
+        /** @var RefreshTokenRepository */
+        $refreshTokenRepo = $this->entityManager->getRepository(RefreshToken::class);
+        $accessToken = $accessTokenRepo->createToken($user);
+        $refreshToken = $refreshTokenRepo->createToken($user);
 
         if ($request->hasSession()) {
             $request->getSession()->invalidate();

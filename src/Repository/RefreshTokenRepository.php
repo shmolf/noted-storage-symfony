@@ -3,8 +3,16 @@
 namespace App\Repository;
 
 use App\Entity\RefreshToken;
+use App\Entity\User;
+use App\Exception\RefreshTokenException;
+use App\TokenAuthority\RefreshTokenAuthority;
+use App\Utility\Random;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @method RefreshToken|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +25,67 @@ class RefreshTokenRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RefreshToken::class);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
+    public function createToken(?User $user): RefreshToken
+    {
+        if ($user === null) {
+            throw new RefreshTokenException(Response::HTTP_BAD_REQUEST, 'User is not set');
+        }
+
+        $entityManager = $this->getEntityManager();
+        $now = new DateTime();
+        $expiration = clone $now;
+        $expiration->modify('+' . RefreshTokenAuthority::TOKEN_LIFESPAN . ' seconds');
+
+        $tokenEntity = new RefreshToken();
+        $tokenEntity
+            ->setExpirationDate($expiration)
+            ->setCreationDate($now)
+            ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
+
+        $user->addRefreshToken($tokenEntity);
+
+        try {
+            $entityManager->persist($tokenEntity);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        } catch (Exception $e) {
+            throw (new RefreshTokenException(Response::HTTP_BAD_REQUEST, 'There was an error creating the token'))
+                ->setErrors(['There was an error creating the refresh token', $e->getMessage()]);
+        }
+
+        return $tokenEntity;
+    }
+
+    public function invalidateToken(string $tokenStr): void
+    {
+        $tokenEntity = $this->findOneBy(['token' => $tokenStr, 'isValid' => true]);
+
+        if ($tokenEntity instanceof RefreshToken) {
+            $tokenEntity->setIsValid(false);
+
+            try {
+                $entityManager = $this->getEntityManager();
+                $entityManager->persist($tokenEntity);
+                $entityManager->flush();
+            } catch (Exception $e) {
+                $errors = [$e->getMessage()];
+                $prevError = $e->getPrevious();
+
+                if ($prevError instanceof Throwable) {
+                    $errors[] = $prevError->getMessage();
+                }
+
+                throw (new RefreshTokenException(
+                    Response::HTTP_BAD_REQUEST,
+                    'There was an error while trying to invalidate the token'
+                ))->setErrors($errors);
+            }
+        }
     }
 
     // /**

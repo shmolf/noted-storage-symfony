@@ -14,10 +14,10 @@ oauth.register:
 
 oauth.token.refresh:
   path: /token/refresh
-  controller: App\Controller\User\OAuthController::getRefreshToken
+  controller: App\Controller\User\OAuthController::refreshToken
   methods: GET
 
 oauth.token.access:
   path: /token/refresh
-  controller: App\Controller\User\OAuthController::getAccessToken
+  controller: App\Controller\User\OAuthController::refreshToken
   methods: GET

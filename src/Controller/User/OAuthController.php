@@ -2,16 +2,25 @@
 
 namespace App\Controller\User;
 
+use App\Entity\AccessToken;
 use App\Entity\AppToken;
+use App\Entity\RefreshToken;
 use App\Entity\User;
 use App\Exception\OAuthException;
 use App\Exception\UserModificationException;
+use App\Repository\AccessTokenRepository;
+use App\Repository\RefreshTokenRepository;
 use App\TokenAuthority\AppTokenAuthority;
+use App\TokenAuthority\RefreshTokenAuthority;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @method User|null getUser()
@@ -73,26 +82,43 @@ class OAuthController extends AbstractController
         return $this->redirectToRoute('oauth.login');
     }
 
-    // public function getRefreshToken(Request $request, AppTokenAuthority $tokenAuthority): Response
-    // {
-    //     $refreshToken = new RefreshToken();
-    //     $refreshToken->setAppToken()
-    //     http_build_query([
-    //         'access_token' => 'some token',
-    //         'expires_in' => 86400,
-    //         'refresh_token' => 'some token',
-    //         'refresh_token_expires_in' =>  525600,
-    //     ]);
-    // }
+    public function refreshToken(Request $request, RouterInterface $router): Response {
+        /** @var EntityManagerInterface */
+        $entityManager = $this->getDoctrine()->getManager();
+        $refreshTokenAuthority = new RefreshTokenAuthority($entityManager);
+        $curRefreshTokenString = $request->headers->get($refreshTokenAuthority::HEADER_TOKEN, '');
+        // Should either be 'refreshToken' or 'accessToken'
+        $tokenType = $request->query->get('grant_type');
 
-    // public function getAccessToken(Request $request, AppTokenAuthority $tokenAuthority): Response
-    // {
-    //     $refreshToken
-    //     http_build_query([
-    //         'access_token' => 'some token',
-    //         'expires_in' => 86400,
-    //         'refresh_token' => 'some token',
-    //         'refresh_token_expires_in' =>  525600,
-    //     ]);
-    // }
+        $curRefreshToken = $refreshTokenAuthority->validateToken($curRefreshTokenString);
+        if ($curRefreshToken === null) {
+            throw new HttpException(Response::HTTP_FORBIDDEN, "Provided refresh token is either expired or invalid.");
+        }
+
+        switch($tokenType) {
+            case 'refreshToken':
+                /** @var RefreshTokenRepository */
+                $tokenRepo = $entityManager->getRepository(RefreshToken::class);
+                $tokenRepo->invalidateToken($curRefreshTokenString);
+                $refreshUri = $router->generate('oauth.token.refresh');
+
+                break;
+            case 'accessToken':
+                /** @var AccessTokenRepository */
+                $tokenRepo = $entityManager->getRepository(AccessToken::class);
+                $refreshUri = $router->generate('oauth.token.access');
+
+                break;
+            default:
+                throw new HttpException(Response::HTTP_NOT_FOUND, "Grant Type ({$tokenType}) is not supported.");
+        }
+
+        $newToken = $tokenRepo->createToken($curRefreshToken->getUser());
+
+        return new JsonResponse([
+            'token' => $newToken->getToken(),
+            'expiration' => ($newToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
+            'uri' => $refreshUri,
+        ]);
+    }
 }

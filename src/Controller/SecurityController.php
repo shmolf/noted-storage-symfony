@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\TokenAuthority\AccessTokenAuthority;
-use App\TokenAuthority\RefreshTokenAuthority;
+use App\Repository\AccessTokenRepository;
+use App\Repository\RefreshTokenRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,8 +51,8 @@ class SecurityController extends AbstractController
     // But, I want it committed at least, before removing.
     public function oAuthLoginSuccess(
         Request $request,
-        RefreshTokenAuthority $refreshAuthority,
-        AccessTokenAuthority $accessAuthority
+        RefreshTokenRepository $refreshRepo,
+        AccessTokenRepository $accessRepo
     ): Response {
         /** @var User */
         $user = $this->getUser();
@@ -61,8 +61,8 @@ class SecurityController extends AbstractController
             throw new Exception('User is not authenticated');
         }
 
-        $accessToken = $accessAuthority->createToken($user);
-        $refreshToken = $refreshAuthority->createToken($user);
+        $accessToken = $accessRepo->createToken($user);
+        $refreshToken = $refreshRepo->createToken($user);
 
         if ($request->hasSession()) {
             $request->getSession()->invalidate();

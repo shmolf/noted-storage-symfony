@@ -39,6 +39,11 @@ class RefreshToken implements Token
      */
     private $user;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isValid;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,18 @@ class RefreshToken implements Token
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getIsValid(): ?bool
+    {
+        return $this->isValid;
+    }
+
+    public function setIsValid(bool $isValid): self
+    {
+        $this->isValid = $isValid;
 
         return $this;
     }
