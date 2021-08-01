@@ -111,16 +111,9 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         return new JsonResponse([
-            'refreshToken' => [
-               'token' => $refreshToken->getToken(),
-               'expiration' => ($refreshToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
-               'uri' => $this->router->generate('oauth.token.refresh'),
-            ],
-            'accessToken' => [
-                'token' => $accessToken->getToken(),
-                'expiration' => ($accessToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
-                'uri' => $this->router->generate('oauth.token.access'),
-            ],
+            'token' => $refreshToken->getToken(),
+            'expiration' => ($refreshToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
+            'uri' => $this->router->generate('oauth.token.refresh'),
         ]);
     }
 
