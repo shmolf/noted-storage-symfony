@@ -45,7 +45,8 @@ class RefreshTokenRepository extends ServiceEntityRepository
         $tokenEntity
             ->setExpirationDate($expiration)
             ->setCreationDate($now)
-            ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
+            ->setToken(Random::createString(256, [Random::ALPHA_NUM]))
+            ->setIsValid(true);
 
         $user->addRefreshToken($tokenEntity);
 

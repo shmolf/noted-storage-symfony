@@ -99,11 +99,8 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new Exception('User not available');
         }
 
-        /** @var AccessTokenRepository */
-        $accessTokenRepo = $this->entityManager->getRepository(AccessToken::class);
         /** @var RefreshTokenRepository */
         $refreshTokenRepo = $this->entityManager->getRepository(RefreshToken::class);
-        $accessToken = $accessTokenRepo->createToken($user);
         $refreshToken = $refreshTokenRepo->createToken($user);
 
         if ($request->hasSession()) {
