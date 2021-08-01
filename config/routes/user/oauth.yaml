@@ -15,7 +15,7 @@ oauth.register:
 oauth.token.refresh:
   path: /token/refresh
   controller: App\Controller\User\OAuthController::refreshToken
-  methods: GET
+  methods: [GET, OPTIONS]
 
 oauth.token.access:
   path: /token/refresh

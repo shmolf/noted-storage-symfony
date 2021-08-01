@@ -8,14 +8,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Psr\Log\LoggerInterface;
 
 class CorsEventSubscriber implements EventSubscriberInterface
 {
     private ParameterBagInterface $moonSilkSack;
+    private LoggerInterface $logger;
 
-    public function __construct(ParameterBagInterface $moonSilkSack)
+    public function __construct(ParameterBagInterface $moonSilkSack, LoggerInterface $logger)
     {
         $this->moonSilkSack = $moonSilkSack;
+        $this->logger = $logger;
     }
 
     public static function getSubscribedEvents()
@@ -34,6 +37,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $method  = $request->getRealMethod();
         if ('OPTIONS' == $method) {
+            $this->logger->debug(__LINE__);
             $response = new Response();
             $event->setResponse($response);
         }
@@ -43,10 +47,12 @@ class CorsEventSubscriber implements EventSubscriberInterface
         if (!$event->isMasterRequest()) {
             return;
         }
+        $this->logger->debug(__LINE__);
+        $this->logger->debug($this->moonSilkSack->get('noted.uri'));
 
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin', $this->moonSilkSack->get('noted.uri'));
         $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT');
-        $response->headers->set('Access-Control-Allow-Headers', 'X-Header-One,X-Header-Two');
+        $response->headers->set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token, X-TOKEN-REFRESH');
     }
 }

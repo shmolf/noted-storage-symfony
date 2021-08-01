@@ -16,15 +16,16 @@ docker-compose --env-file docker.env.local config
 ```
 
 # Build the Images
-Until I figure out how to `npm install` before `npm run dev`, it's broken out into multiple services.  
-And, need to run the `node-install` image first.
-([reference](https://hackernoon.com/a-better-way-to-develop-node-js-with-docker-cd29d3a0093))
-
 **To run the entire setup**
 - Make sure you've created a `docker.env.local` file, which'd be based on `docker.env`.
 ```bash
 docker-compose --env-file docker.env.local up -d --build
 ```
+
+# Node Container
+The container only needs to build the public assets, and it'll handle the npm depedency installation and all.  
+It does not perform any post-build cleanup, so if any `node_modules` directory is created, it'll persist until manually
+deleted. However, I would hold off since it operates as cache, facilitating subsequent build operations.
 
 # Database
 If you drop/change the database, or change either `DB_USER` or `DB_PASSWORD`, then you should remove the volume

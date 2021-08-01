@@ -32,6 +32,7 @@ services:
     environment:
       - DATABASE_URL=${SYMFONY_DB_URL}
       - DATABASE_VERSION=${SYMFONY_DB_VERSION}
+      - NOTED_HOST=${NOTED_HOST}
     networks:
       - noted-storage-net
     depends_on:
