@@ -30,7 +30,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return $request->headers->has(AppTokenAuthority::HEADER_APP_TOKEN);
+        return $request->headers->has(AccessTokenAuthority::HEADER_TOKEN);
     }
 
     /**
