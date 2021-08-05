@@ -6,7 +6,7 @@ use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-class AppTokenException extends HttpException implements ErrorList, Throwable
+class TokenAuthenticationException extends HttpException implements Throwable
 {
     private array $errors = [];
 
@@ -18,23 +18,5 @@ class AppTokenException extends HttpException implements ErrorList, Throwable
         ?int $code = 0
     ) {
         parent::__construct($statusCode, $message, $previous, $headers, $code);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getErrors(): array
-    {
-        return $this->errors;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setErrors(array $errors): self
-    {
-        $this->errors = $errors;
-
-        return $this;
     }
 }

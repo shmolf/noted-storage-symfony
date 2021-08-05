@@ -2,7 +2,8 @@
 
 namespace App\Security;
 
-use App\TokenAuthority\AppTokenAuthority;
+use App\Exception\TokenAuthenticationException;
+use App\TokenAuthority\AccessTokenAuthority;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +39,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return $request->headers->get(AppTokenAuthority::HEADER_APP_TOKEN);
+        return $request->headers->get(AccessTokenAuthority::HEADER_TOKEN);
     }
 
     public function getUser($token, UserProviderInterface $userProvider): ?UserInterface
@@ -57,7 +58,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        // Check credentials - e.g. make sure the password is valid.
         // In case of an API token, no credential check is needed.
 
         // Return `true` to cause authentication success
@@ -72,15 +72,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $data = [
-            // you may want to customize or obfuscate the message first
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()) . 'yep'
-
-            // or to translate this message
-            // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
-        ];
-
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+        throw new TokenAuthenticationException(Response::HTTP_UNAUTHORIZED, 'Unauthorized Access', $exception);
     }
 
     /**

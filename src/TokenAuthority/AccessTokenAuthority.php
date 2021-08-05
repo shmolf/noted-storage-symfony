@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AccessTokenAuthority implements TokenAuthority
 {
     public const TOKEN_LIFESPAN = 3600; // 60 seconds X 60 minutes
+    public const HEADER_TOKEN = 'X-TOKEN-ACCESS';
 
     private EntityManagerInterface $em;
 

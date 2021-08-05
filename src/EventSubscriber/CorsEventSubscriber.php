@@ -15,6 +15,17 @@ class CorsEventSubscriber implements EventSubscriberInterface
     private ParameterBagInterface $moonSilkSack;
     private LoggerInterface $logger;
 
+    private const ALLOWED_HEADERS = [
+        'Origin',
+        'X-Requested-With',
+        'Content-Type',
+        'Accept',
+        'Authorization',
+        'X-CSRF-Token',
+        'X-TOKEN-REFRESH',
+        'X-TOKEN-ACCESS',
+    ];
+
     public function __construct(ParameterBagInterface $moonSilkSack, LoggerInterface $logger)
     {
         $this->moonSilkSack = $moonSilkSack;
@@ -53,6 +64,6 @@ class CorsEventSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin', $this->moonSilkSack->get('noted.uri'));
         $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT');
-        $response->headers->set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRF-Token, X-TOKEN-REFRESH');
+        $response->headers->set('Access-Control-Allow-Headers', join(', ', self::ALLOWED_HEADERS));
     }
 }

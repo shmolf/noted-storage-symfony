@@ -8,7 +8,7 @@ use Throwable;
 
 class UserCreationException extends HttpException implements ErrorList, Throwable
 {
-    private array $errors;
+    private array $errors = [];
 
     public function __construct(
         int $statusCode = 400,
@@ -20,11 +20,17 @@ class UserCreationException extends HttpException implements ErrorList, Throwabl
         parent::__construct($statusCode, $message, $previous, $headers, $code);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getErrors(): array
     {
         return $this->errors;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function setErrors(array $errors): self
     {
         $this->errors = $errors;
