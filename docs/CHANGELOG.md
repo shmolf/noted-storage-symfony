@@ -1,3 +1,65 @@
+## [3.0.0](https://github.com/shmolf/noted-storage-symfony/compare/v2.0.0...v3.0.0) (2021-08-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **token:** new refresh/access token & hopefully working oauth page
+* **token:** replace apptoken association with user
+* **routes:** reorganize some routes (oauth vs apptoken)
+
+### Features
+
+* **codespaces:** add codespace container config ([49dd155](https://github.com/shmolf/noted-storage-symfony/commit/49dd155e04b8f166a0d7a121d6a6e86abeb6dd64))
+* **oauth|refresh:** add method for creating new refresh tokken ([2d7842c](https://github.com/shmolf/noted-storage-symfony/commit/2d7842c084d264a7c94fe823e79bbaf8d98a0ac7))
+* **routes:** add note-related routes ([f76f933](https://github.com/shmolf/noted-storage-symfony/commit/f76f93374b160fdb885181601d62399ebc596c62))
+* **oauth:** add refresh & access token entities ([1c9a7f5](https://github.com/shmolf/noted-storage-symfony/commit/1c9a7f5d2d8f8e64e324776dd414702afaf8a3ce))
+* **oauth:** add register function ([a7262ec](https://github.com/shmolf/noted-storage-symfony/commit/a7262ec7f799b1757f762671a23630bb54b62243))
+* **register:** autoclose oauth login on success ([045657c](https://github.com/shmolf/noted-storage-symfony/commit/045657c034e6eafeeb5295213c0457c968c749b1))
+* **token authentication:** cleanup irrelev exceptions & start on access token ([9b6ed4d](https://github.com/shmolf/noted-storage-symfony/commit/9b6ed4dbf5f3ce02aa763add0872596f3b319664))
+* **docker:** consolidate configs into DockerFiles ([d76b329](https://github.com/shmolf/noted-storage-symfony/commit/d76b329cc04fd9a7ced9ecbc40614e355fff8447))
+* **oauth|apptoken:** did a couple of things ([bc08d17](https://github.com/shmolf/noted-storage-symfony/commit/bc08d17dba3e1a80e2627974f4a13d2164766b44))
+* **refresh-token:** extend lifetime ([deba952](https://github.com/shmolf/noted-storage-symfony/commit/deba952a5b1d482a7f4d76be61b7e57b7819c70e))
+* **cors|refresh:** getting bloody close to being able to refresh the token ([9a9176e](https://github.com/shmolf/noted-storage-symfony/commit/9a9176e260092bd883cd21af6f9c399e167aea9e))
+* **routes:** move the oauth routes around to new config file ([7507ea8](https://github.com/shmolf/noted-storage-symfony/commit/7507ea8197b50dffd55edb9501f0ccc4761e0d33))
+* **token:** new refresh/access token & hopefully working oauth page ([8d2fe96](https://github.com/shmolf/noted-storage-symfony/commit/8d2fe960b68f21b7e47cae99cbe20190eb58c078))
+* **oauth:** preliminary registration logic ([2cd1ba1](https://github.com/shmolf/noted-storage-symfony/commit/2cd1ba1c621fc6fe4ac2813d6dc3220b0482772e))
+* **oauth|register:** provide more token data in response ([24fd8b9](https://github.com/shmolf/noted-storage-symfony/commit/24fd8b9544c7bc848c62ac21a03371dc99a13f5a))
+* **routes:** re-organize API routes ([1481163](https://github.com/shmolf/noted-storage-symfony/commit/1481163e0fc0f9e771e1b71a92914bf4565817a5))
+* **routes:** reorganize some routes (oauth vs apptoken) ([8fcd1e7](https://github.com/shmolf/noted-storage-symfony/commit/8fcd1e74568bb79fa36f309d9525d0881e56c799))
+* **token:** replace apptoken association with user ([741b9cb](https://github.com/shmolf/noted-storage-symfony/commit/741b9cb7b984aa79531c17da99322edae37959be))
+* **note|controller:** sure-up some logic & eliminate `clientuuid` refs ([707b470](https://github.com/shmolf/noted-storage-symfony/commit/707b4704e23a0c15429548d339a9476300156d4c))
+* **codespaces:** use predefined container config ([89c7338](https://github.com/shmolf/noted-storage-symfony/commit/89c733800b85bc5bfc3e944d2c8d9bff66a5162c))
+
+
+### Bug Fixes
+
+* address linting error by changing prop init ([0c98470](https://github.com/shmolf/noted-storage-symfony/commit/0c9847081b224683b43a555b8abfe91730563f61))
+* **readme:** badge link to point to this repo ([0c2996c](https://github.com/shmolf/noted-storage-symfony/commit/0c2996c37e99084faacb89f949f99c6ccbcbab2f))
+* **entity:** cleanup `userId` refs to `user` ([0f0eb36](https://github.com/shmolf/noted-storage-symfony/commit/0f0eb360222a563796a496640f12a6d646e9d914))
+* correct `userId` ref & add migration ([55d754d](https://github.com/shmolf/noted-storage-symfony/commit/55d754d2c0c650c081d2333d1ca6fd00ed40d50c))
+* **psalm|lint:** enhance psalm config & restore/fix code ([f24bf36](https://github.com/shmolf/noted-storage-symfony/commit/f24bf36221bdf22330193d919641392e4d57ad63))
+* **oauth|tokens:** format expiration date ([0534607](https://github.com/shmolf/noted-storage-symfony/commit/0534607c52c4341f909eacd800815ac579922c0e))
+* **token:** improve AppToken validation ([ec5fac9](https://github.com/shmolf/noted-storage-symfony/commit/ec5fac9672c4263541c89009653ca8c2d2b5bb51))
+* **oauth|refresh-tokens|access-tokens:** jfc, finally got some form of oauth login working ([7ef92fe](https://github.com/shmolf/noted-storage-symfony/commit/7ef92fefa77bd6db27ca40e8e56e38cddf2df53d))
+* **composer:** license field ([c482155](https://github.com/shmolf/noted-storage-symfony/commit/c482155cd156e8e3d93a28b6e86dde2596bd74c9))
+* **NoteTag:** name property should be in `main` group, and null-coallesce default ([8e6842f](https://github.com/shmolf/noted-storage-symfony/commit/8e6842f015171b44fea5110cf92ffda30983af86))
+* **oauth:** need to communicate to parent that it's ready for the pipe ([e0ebd47](https://github.com/shmolf/noted-storage-symfony/commit/e0ebd474b15ff6d8bb617b21ffd7af57f221297c))
+* **routes:** oauth register pointed to wrong controller ([80e1803](https://github.com/shmolf/noted-storage-symfony/commit/80e18034d1942439971de0f5ed21c8d7d752be63))
+* **repo:** refer to recently updated method sig ([b34bb82](https://github.com/shmolf/noted-storage-symfony/commit/b34bb82b85660508d870223c2330b280b5646e88))
+* **oauth:** registration bugs ([204eac8](https://github.com/shmolf/noted-storage-symfony/commit/204eac861ea92cbcaf14b17f4e5d745261a9b8c5))
+* remove debug lines ([2e485aa](https://github.com/shmolf/noted-storage-symfony/commit/2e485aaffe0d23d1860de0c22851f0cd55836981))
+* **oauth:** remove some stale code ([83377a9](https://github.com/shmolf/noted-storage-symfony/commit/83377a929c2d38da7143e423d583a58f4acfd267))
+* **oauth|register:** remove unused accessToken field ([ee2b5ae](https://github.com/shmolf/noted-storage-symfony/commit/ee2b5ae722547518b966e6bff2bd891304a28878))
+* **security:** reorganize routes and auth requirements ([9a75895](https://github.com/shmolf/noted-storage-symfony/commit/9a75895b01010ef66339f191ec6b4f3560588ca8))
+* update param types ([2f3d3cb](https://github.com/shmolf/noted-storage-symfony/commit/2f3d3cbf26c95dea03ab3f160bea2e1d6decce30))
+* **oauth|register:** update refresh uri to be absolute url ([b041f48](https://github.com/shmolf/noted-storage-symfony/commit/b041f48117f62a8458895f16a9e33dfe235ea657))
+* **token authentication:** update to use Access over App tokens ([7f2584c](https://github.com/shmolf/noted-storage-symfony/commit/7f2584cdef96aa34595211551d02e4df6fa83524))
+
+
+### Reverts
+
+* **codespaces:** delete devcontainer config ([2e05563](https://github.com/shmolf/noted-storage-symfony/commit/2e05563ecd47ff1e4d4a5a61303c0fa82150a565))
+
 ## [2.0.0](https://github.com/shmolf/noted-storage-symfony/compare/v1.0.0...v2.0.0) (2021-07-03)
 
 
