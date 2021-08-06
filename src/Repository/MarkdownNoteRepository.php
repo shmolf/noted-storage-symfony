@@ -68,6 +68,8 @@ class MarkdownNoteRepository extends ServiceEntityRepository
         $noteEntity->setInTrashcan(false);
         $noteEntity->setIsDeleted(false);
         $noteEntity->setUuid(Uuid::uuid4()->toString());
+        $noteEntity->setContent('');
+        $noteEntity->setTitle('');
 
         $now = new DateTime();
         $noteEntity->setLastModified($now);
