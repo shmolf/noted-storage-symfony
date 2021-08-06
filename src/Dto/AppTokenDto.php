@@ -16,7 +16,7 @@ class AppTokenDto
     public function __construct(AppToken $token) {
         $this->name = $token->getName();
         $this->uuid = $token->getUuid();
-        $this->created = $token->getCreatedDate();
+        $this->created = $token->getCreationDate();
         $this->expires = $token->getExpirationDate();
         $this->lastAccess = $token->getLastAccessDate();
     }

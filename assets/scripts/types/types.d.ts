@@ -3,3 +3,5 @@ export interface AjaxErrorRepsonse {
     title: string,
     errors: string[],
 }
+
+export interface MapStringTo<T> { [key:string]:T; }

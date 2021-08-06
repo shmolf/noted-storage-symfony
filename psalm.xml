@@ -18,4 +18,15 @@
         <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin"/>
         <pluginClass class="Weirdan\DoctrinePsalmPlugin\Plugin"/>
     </plugins>
+
+    <issueHandlers>
+        <UnnecessaryVarAnnotation errorLevel="suppress" />
+
+        <LessSpecificImplementedReturnType>
+            <errorLevel type="suppress">
+            <directory name="./src/Repository" />
+            <!-- <file name="some_bad_file.php" />   all related issues in this file are suppressed -->
+            </errorLevel>
+        </LessSpecificImplementedReturnType>
+    </issueHandlers>
 </psalm>

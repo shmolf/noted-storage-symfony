@@ -1,0 +1,35 @@
+api.v1.note.list:
+  path: /note/list
+  controller: App\Controller\NoteController::getNoteList
+  methods: GET
+
+api.v1.note.new:
+  path: /note/new
+  controller: App\Controller\NoteController::newNote
+  methods: POST
+
+api.v1.note.getByUuid:
+  path: /note/uuid/{uuid}
+  controller: App\Controller\NoteController::getNoteByUuid
+  methods: GET
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'
+
+api.v1.note.deleteByUuid:
+  path: /note/uuid/{uuid}
+  controller: App\Controller\NoteController::deleteNoteByUuid
+  methods: DELETE
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'
+
+api.v1.note.upsert:
+  path: /note/uuid/{uuid}
+  controller: App\Controller\NoteController::upsertNote
+  methods: PUT
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'
+
+api.v1.note.export:
+  path: /note/export
+  controller: App\Controller\NoteController::getNotesForUser
+  methods: GET

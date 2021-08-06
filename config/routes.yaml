@@ -22,9 +22,19 @@ logout:
   # we don't need to specify a controller, since `security.yaml` identifies this route-key as logout, and does magic
 
 account:
-  resource: 'routes/accounts.yaml'
+  resource: 'routes/user/account.yaml'
   prefix: /account
 
+appToken:
+  resource: 'routes/user/appToken.yaml'
+  prefix: /appToken
+
 api:
+  utf8: true
   resource: 'routes/api/routes.yaml'
-  prefix: /api
+  prefix: /🔌
+
+oauth:
+  utf8: true
+  resource: 'routes/user/oauth.yaml'
+  prefix: /㊙

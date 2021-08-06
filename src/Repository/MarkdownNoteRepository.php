@@ -11,11 +11,14 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Ramsey\Uuid\Uuid;
-use shmolf\NotedHydrator\Entity\NoteEntity as ClientNoteEntity;
+use shmolf\NotedHydrator\Entity\NoteEntity as HydratedNote;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @method MarkdownNote|null find($id, $lockMode = null, $lockVersion = null)
  * @method MarkdownNote|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MarkdownNote[]    findAll()
+ * @method MarkdownNote[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class MarkdownNoteRepository extends ServiceEntityRepository
 {
@@ -56,46 +59,54 @@ class MarkdownNoteRepository extends ServiceEntityRepository
     }
     */
 
-    public function upsert(ClientNoteEntity $noteData, User $user): MarkdownNote
+    public function new(User $user): MarkdownNote
     {
         $entityManager = $this->getEntityManager();
-        $userId = $user->getId();
-
-        // First, try to fetch by the Host UUID, then the Client Uuid, and finally just create a new one
-        $noteEntity = $this->findOneBy(['userId' => $userId, 'noteUuid' => $noteData->noteUuid])
-            ?? $this->findOneBy(['userId' => $userId, 'clientUuid' => $noteData->clientUuid])
-            ?? new MarkdownNote();
+        $noteEntity = new MarkdownNote();
 
         $noteEntity->setUser($user);
-        $noteEntity->setTitle($noteData->title);
-        $noteEntity->setContent($noteData->content);
-        $noteEntity->setInTrashcan($noteData->inTrashcan);
-        $noteEntity->setIsDeleted($noteData->isDeleted);
-
-        if ($noteEntity->getNoteUuid() === null) {
-            $noteEntity->setNoteUuid(Uuid::uuid4()->toString());
-        }
-
-        $noteEntity->setClientUuid($noteData->clientUuid === null
-            ? $noteEntity->getNoteUuid()
-            : $noteData->clientUuid->toString()
-        );
+        $noteEntity->setInTrashcan(false);
+        $noteEntity->setIsDeleted(false);
+        $noteEntity->setUuid(Uuid::uuid4()->toString());
 
         $now = new DateTime();
         $noteEntity->setLastModified($now);
+        $noteEntity->setCreatedDate($now);
 
-        if ($noteEntity->getCreatedDate() === null) {
-            $noteEntity->setCreatedDate($now);
+        try {
+            $entityManager->persist($noteEntity);
+            $entityManager->flush();
+            $entityManager->clear();
+        } catch (Exception $e) {
+            throw new EntitySaveException(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        $noteEntity->clearTags();
+        return $noteEntity;
+    }
+
+    public function upsert(string $uuid, HydratedNote $noteData, User $user): MarkdownNote
+    {
+        $entityManager = $this->getEntityManager();
+        $noteEntity = $this->findOneBy(['user' => $user, 'uuid' => $uuid]);
+
+        if ($noteEntity === null) {
+            throw new EntitySaveException(Response::HTTP_NOT_FOUND);
+        }
+
+        $now = new DateTime();
+
+        $noteEntity->setUser($user)
+            ->setTitle($noteData->title)
+            ->setContent($noteData->content)
+            ->setInTrashcan($noteData->inTrashcan)
+            ->setIsDeleted($noteData->isDeleted)
+            ->clearTags()
+            ->setLastModified($now);
 
         foreach ($noteData->tags as $tag) {
-            $noteTag = $this->noteTagRepo
-                ->findOneBy(['userId' => $userId, 'name' => $tag])
-                ?? new NoteTag();
+            $noteTag = $this->noteTagRepo->findOneBy(['user' => $user, 'name' => $tag]) ?? new NoteTag();
             $noteTag->addMarkdownNote($noteEntity);
-            $noteTag->setUserId($user);
+            $noteTag->setUser($user);
 
             if ($noteTag->getName() === null) {
                 $noteTag->setName($tag);
@@ -121,16 +132,13 @@ class MarkdownNoteRepository extends ServiceEntityRepository
         return $noteEntity;
     }
 
-    public function delete(string $clientUuid, User $user): bool
+    public function delete(string $uuid, User $user): bool
     {
         $entityManager = $this->getEntityManager();
-        $userId = $user->getId();
-
-        // First, try to fetch by the Host UUID, then the Client Uuid, and finally just create a new one
-        $noteEntity = $this->findOneBy(['userId' => $userId, 'clientUuid' => $clientUuid]);
+        $noteEntity = $this->findOneBy(['user' => $user, 'uuid' => $uuid]);
 
         if ($noteEntity === null) {
-            return false;
+            throw new EntitySaveException(Response::HTTP_NOT_FOUND);
         }
 
         $entityManager->remove($noteEntity);

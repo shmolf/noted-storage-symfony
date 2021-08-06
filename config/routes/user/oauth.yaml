@@ -1,0 +1,23 @@
+oauth.login:
+  path: /login
+  controller: App\Controller\SecurityController::oAuthLogin
+
+oauth.login.success:
+  path: /login/success
+  controller: App\Controller\SecurityController::oAuthLoginSuccess
+  methods: GET
+
+oauth.register:
+  path: /register
+  controller: App\Controller\User\OAuthController::oAuthRegister
+  methods: GET
+
+oauth.token.refresh:
+  path: /token/refresh
+  controller: App\Controller\User\OAuthController::refreshToken
+  methods: [GET, OPTIONS]
+
+oauth.token.access:
+  path: /token/refresh
+  controller: App\Controller\User\OAuthController::refreshToken
+  methods: GET

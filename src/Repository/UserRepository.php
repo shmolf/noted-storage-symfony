@@ -2,9 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\AppToken;
+use App\Entity\AccessToken;
 use App\Entity\User;
-use App\Repository\AppTokenRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -15,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @method User|null   find($id, $lockMode = null, $lockVersion = null)
  * @method User|null   findOneBy(array $criteria, array $orderBy = null)
+ * @method User[]    findAll()
+ * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
@@ -38,15 +39,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
-     * The user is identified by their app token, so `$username` is actually a token
+     * The user is identified by their access token, so `$username` is actually a token
      */
     public function loadUserByUsername($username): ?User
     {
-        /** @var AppToken */
+        /** @var AccessToken */
         /** @psalm-suppress UndefinedClass */
-        $appToken = $this->_em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $username]);
+        $accessToken = $this->_em->getRepository(AccessToken::class)->findOneBy(['token' => $username]);
 
-        return $appToken instanceof AppToken ? $appToken->getUser() : null;
+        return $accessToken instanceof AccessToken ? $accessToken->getUser() : null;
     }
 
     // /**

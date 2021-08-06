@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\AppTokenRepository;
+use DateTimeInterface;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AppTokenRepository::class)
  */
-class AppToken
+class AppToken implements Token
 {
     /**
      * @ORM\Id
@@ -18,24 +20,24 @@ class AppToken
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=510)
      */
-    private $authorizationToken;
+    private $token;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdDate;
+    private ?DateTimeInterface $creationDate = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $expirationDate;
+    private ?DateTimeInterface $expirationDate = null;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastAccessDate;
+    private ?DateTimeInterface $lastAccessDate = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="appTokens")
@@ -58,48 +60,48 @@ class AppToken
         return $this->id;
     }
 
-    public function getAuthorizationToken(): ?string
+    public function getToken(): ?string
     {
-        return $this->authorizationToken;
+        return $this->token;
     }
 
-    public function setAuthorizationToken(string $authorizationToken): self
+    public function setToken(string $token): self
     {
-        $this->authorizationToken = $authorizationToken;
+        $this->token = $token;
 
         return $this;
     }
 
-    public function getCreatedDate(): ?\DateTimeInterface
+    public function getCreationDate(): ?DateTimeInterface
     {
-        return $this->createdDate;
+        return $this->creationDate;
     }
 
-    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    public function setCreationDate(DateTimeInterface $creationDate): self
     {
-        $this->createdDate = $createdDate;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
 
-    public function getExpirationDate(): ?\DateTimeInterface
+    public function getExpirationDate(): ?DateTimeInterface
     {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate(?\DateTimeInterface $expirationDate): self
+    public function setExpirationDate(?DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
 
         return $this;
     }
 
-    public function getLastAccessDate(): ?\DateTimeInterface
+    public function getLastAccessDate(): ?DateTimeInterface
     {
         return $this->lastAccessDate;
     }
 
-    public function setLastAccessDate(?\DateTimeInterface $lastAccessDate): self
+    public function setLastAccessDate(?DateTimeInterface $lastAccessDate): self
     {
         $this->lastAccessDate = $lastAccessDate;
 

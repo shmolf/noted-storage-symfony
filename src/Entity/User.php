@@ -47,20 +47,32 @@ class User implements UserInterface
     private $appTokens;
 
     /**
-     * @ORM\OneToMany(targetEntity=MarkdownNote::class, mappedBy="userId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=MarkdownNote::class, mappedBy="user", orphanRemoval=true)
      */
     private $markdownNotes;
 
     /**
-     * @ORM\OneToMany(targetEntity=NoteTag::class, mappedBy="userId", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=NoteTag::class, mappedBy="user", orphanRemoval=true)
      */
     private $noteTags;
+
+    /**
+     * @ORM\OneToMany(targetEntity=RefreshToken::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $refreshTokens;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AccessToken::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $accessTokens;
 
     public function __construct()
     {
         $this->appTokens = new ArrayCollection();
         $this->markdownNotes = new ArrayCollection();
         $this->noteTags = new ArrayCollection();
+        $this->refreshTokens = new ArrayCollection();
+        $this->accessTokens = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -231,7 +243,7 @@ class User implements UserInterface
     {
         if (!$this->noteTags->contains($noteTag)) {
             $this->noteTags[] = $noteTag;
-            $noteTag->setUserId($this);
+            $noteTag->setUser($this);
         }
 
         return $this;
@@ -240,6 +252,70 @@ class User implements UserInterface
     public function removeNoteTag(NoteTag $noteTag): self
     {
         $this->noteTags->removeElement($noteTag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RefreshToken[]
+     *
+     * @psalm-return Collection<array-key, RefreshToken>
+     */
+    public function getRefreshTokens(): Collection
+    {
+        return $this->refreshTokens;
+    }
+
+    public function addRefreshToken(RefreshToken $refreshToken): self
+    {
+        if (!$this->refreshTokens->contains($refreshToken)) {
+            $this->refreshTokens[] = $refreshToken;
+            $refreshToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefreshToken(RefreshToken $refreshToken): self
+    {
+        if ($this->refreshTokens->removeElement($refreshToken)) {
+            // set the owning side to null (unless already changed)
+            if ($refreshToken->getUser() === $this) {
+                $refreshToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AccessToken[]
+     *
+     * @psalm-return Collection<array-key, AccessToken>
+     */
+    public function getAccessTokens(): Collection
+    {
+        return $this->accessTokens;
+    }
+
+    public function addAccessToken(AccessToken $accessToken): self
+    {
+        if (!$this->accessTokens->contains($accessToken)) {
+            $this->accessTokens[] = $accessToken;
+            $accessToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessToken(AccessToken $accessToken): self
+    {
+        if ($this->accessTokens->removeElement($accessToken)) {
+            // set the owning side to null (unless already changed)
+            if ($accessToken->getUser() === $this) {
+                $accessToken->setUser(null);
+            }
+        }
 
         return $this;
     }

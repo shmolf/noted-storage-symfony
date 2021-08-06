@@ -7,8 +7,10 @@
     <meta name= 'viewport' content = 'width = device-width' />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>Note'd Storage Login</title>
+    <title>Note'd Storage - Login</title>
     {{ encore_entry_link_tags('oauth-login') }}
+    {# <link rel="stylesheet" crossorigin="anonymous"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" /> #}
 </head>
 <body>
     <main>
@@ -27,14 +29,14 @@
                 <div class="row col s12">
                     <div class="right">
                         <button id="login" type="submit" class="btn">login</button>
-                        <input type="hidden" name="_csrf_token" value="{{ csrf_token(crsfId) }}" />
-                        <input type="hidden" name="redirect" value="{{ redirect|raw }}" />
+                        <input id="_csrf_token" type="hidden" name="_csrf_token" value="{{ csrf_token(crsfId) }}" />
+                        <input id="referrer" type="hidden" name="referrer" value="{{ referrer }}" />
                     </div>
                 </div>
             </div>
         </form>
         <div>
-            <button type="button" class="btn" target="_blank" id="cancel" data-url="{{ redirect }}">
+            <button type="button" class="btn" id="cancel" onclick="window.close()">
                 Cancel
             </button>
         </div>

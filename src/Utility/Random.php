@@ -11,7 +11,7 @@ class Random {
     public const SYMBOLS = 8;
     public const ALPHA_NUM = self::LOWERCASE | self::UPPERCASE | self::NUMERICAL;
 
-    public static function createString(int $length = 1, array $flags = []){
+    public static function createString(int $length = 1, array $flags = []): string {
         $enabledOptions = array_reduce($flags, fn(int $options, int $flag) => $options | $flag, 0);
 
         if ($enabledOptions === 0) {

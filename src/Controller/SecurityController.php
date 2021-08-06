@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Repository\AccessTokenRepository;
+use App\Repository\RefreshTokenRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +23,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -35,20 +38,40 @@ class SecurityController extends AbstractController
 
     public function oAuthLogin(Request $request): Response
     {
-        // We don't want library computers to share sessions...
+        $referrer = $request->server->get('HTTP_REFERER');
+        $request->getSession()->set('oauth-referrer', $referrer);
+
+        return $this->render('security/oauth-login.html.twig', [
+            'crsfId' => self::CRSF_LOGIN_OAUTH_TKN,
+            'referrer' => $referrer,
+        ]);
+    }
+
+    // This method is deprecated. Returning with a JSON response from the Authenticator.
+    // But, I want it committed at least, before removing.
+    public function oAuthLoginSuccess(
+        Request $request,
+        RefreshTokenRepository $refreshRepo,
+        AccessTokenRepository $accessRepo
+    ): Response {
+        /** @var User */
+        $user = $this->getUser();
+
+        if ($user === null) {
+            throw new Exception('User is not authenticated');
+        }
+
+        $accessToken = $accessRepo->createToken($user);
+        $refreshToken = $refreshRepo->createToken($user);
+
         if ($request->hasSession()) {
             $request->getSession()->invalidate();
         }
 
-        $redirect = $request->query->get('redirect') ?? $request->headers->get('referer');
-
-        if ($redirect === null) {
-            throw new Exception('Missing redirect on successful login');
-        }
-
-        return $this->render('security/oauth-login.html.twig', [
-            'crsfId' => self::CRSF_LOGIN_OAUTH_TKN,
-            'redirect' => $redirect,
+        return $this->render('security/oauth-success.html.twig', [
+            'refreshToken' => $refreshToken->getToken(),
+            'accessToken' => $accessToken->getToken(),
+            'referrer' => $request->getSession()->get('oauth-referrer'),
         ]);
     }
 }

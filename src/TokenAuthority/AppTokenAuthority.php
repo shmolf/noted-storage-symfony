@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security;
+namespace App\TokenAuthority;
 
 use App\Entity\AppToken;
 use App\Exception\AppTokenException;
@@ -12,9 +12,11 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TokenAuthority
+class AppTokenAuthority implements TokenAuthority
 {
     public const SESSION_OAUTH_APP_TOKEN = 'oauth-generated-app-token';
+    public const HEADER_APP_TOKEN = 'X-AUTH-TOKEN';
+
     private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $em)
@@ -32,9 +34,9 @@ class TokenAuthority
         $tokenEntity
             ->setName($tokenName)
             ->setExpirationDate($tokenExpiration)
-            ->setCreatedDate($now)
+            ->setCreationDate($now)
             ->setUuid(Uuid::uuid4()->toString())
-            ->setAuthorizationToken(Random::createString(42, [Random::ALPHA_NUM]));
+            ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
 
         /** @psalm-suppress ArgumentTypeCoercion */
         $tokenEntity->setUser($user);
@@ -49,5 +51,12 @@ class TokenAuthority
         }
 
         return $tokenEntity;
+    }
+
+    public function validateToken(string $tokenString): ?AppToken
+    {
+        /** @var AppToken|null */
+        $token = $this->em->getRepository(AppToken::class)->findOneBy(['authorizationToken' => $tokenString]);
+        return $token === null || $token->getExpirationDate() <= new DateTime() ? null : $token;
     }
 }

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='UTF-8' />
+    <meta name= 'viewport' content = 'width = device-width' />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>Note'd Storage - Success</title>
+</head>
+<body>
+    <main>
+        <p>
+            Success
+        </p>
+        <p>
+            Access has been granted to the application. Please wait for this window to close.
+        </p>
+        <input id="refresh-token" type="hidden" value="{{ refreshToken }}" />
+        <input id="access-token" type="hidden" value="{{ accessToken }}" />
+        <input id="referrer" type="hidden" value="{{ referrer }}" />
+    </main>
+    {{ encore_entry_script_tags('oauth-success') }}
+</body>
+</html>

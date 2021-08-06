@@ -13,8 +13,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=MarkdownNoteRepository::class)
  * @UniqueEntity(
- *      fields={"user_id","client_uuid"},
- *      message="Each user will have a their own set of unique client-side uuids."
+ *      fields={"user_id","uuid"},
+ *      message="Each user will have a their own set of unique uuids."
  * )
  */
 class MarkdownNote
@@ -30,13 +30,13 @@ class MarkdownNote
      * @ORM\Column(type="string", length=16777215, nullable=true)
      * @Groups("main")
      */
-    private ?string $content;
+    private ?string $content = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("main")
      */
-    private ?string $title;
+    private ?string $title = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="markdownNotes")
@@ -71,17 +71,13 @@ class MarkdownNote
 
     /**
      * @ORM\Column(type="guid", unique=true)
-     */
-    private string $noteUuid;
-
-    /**
-     * @ORM\Column(type="guid", nullable=true)
      * @Groups("main")
      */
-    private ?string $clientUuid;
+    private string $uuid;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
+     * @Groups("main")
      */
     private $isDeleted;
 
@@ -124,9 +120,9 @@ class MarkdownNote
         return $this->user;
     }
 
-    public function setUser(User $userId): self
+    public function setUser(User $user): self
     {
-        $this->user = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -202,26 +198,14 @@ class MarkdownNote
         return $this;
     }
 
-    public function getNoteUuid(): ?string
+    public function getUuid(): ?string
     {
-        return $this->noteUuid;
+        return $this->uuid;
     }
 
-    public function setNoteUuid(string $noteUuid): self
+    public function setUuid(string $uuid): self
     {
-        $this->noteUuid = $noteUuid;
-
-        return $this;
-    }
-
-    public function getClientUuid(): ?string
-    {
-        return $this->clientUuid;
-    }
-
-    public function setClientUuid(?string $clientUuid): self
-    {
-        $this->clientUuid = $clientUuid;
+        $this->uuid = $uuid;
 
         return $this;
     }

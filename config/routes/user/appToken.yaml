@@ -1,0 +1,16 @@
+appToken.list:
+  path: /app/list
+  controller: App\Controller\User\AppTokenController::appTokenList
+  methods: GET
+
+appToken.new:
+  path: /app
+  controller: App\Controller\User\AppTokenController::createAppToken
+  methods: POST
+
+appToken.delete:
+  path: /app/{uuid}
+  controller: App\Controller\User\AppTokenController::deleteAppToken
+  methods: DELETE
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'

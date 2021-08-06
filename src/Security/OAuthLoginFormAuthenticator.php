@@ -3,11 +3,16 @@
 namespace App\Security;
 
 use App\Controller\SecurityController;
-use App\Exception\AppTokenException;
+use App\Entity\AccessToken;
+use App\Entity\RefreshToken;
+use App\Entity\User;
+use App\Repository\AccessTokenRepository;
+use App\Repository\RefreshTokenRepository;
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
@@ -26,20 +31,17 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
     use TargetPathTrait;
 
-    private UserRepository $userRepository;
     private RouterInterface $router;
     private CsrfTokenManagerInterface $csrfTokenManager;
     private UserPasswordEncoderInterface $passwordEncoder;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
-        UserRepository $userRepository,
         RouterInterface $router,
         CsrfTokenManagerInterface $csrfTokenManager,
         UserPasswordEncoderInterface $passwordEncoder,
         EntityManagerInterface $entityManager
     ) {
-        $this->userRepository = $userRepository;
         $this->router = $router;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
@@ -48,7 +50,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     public function supports(Request $request): bool
     {
-        return $request->attributes->get('_route') === 'account.oauth.login' && $request->isMethod('POST');
+        return $request->attributes->get('_route') === 'oauth.login' && $request->isMethod('POST');
     }
 
     public function getCredentials(Request $request): array
@@ -75,7 +77,9 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
             throw new InvalidCsrfTokenException();
         }
 
-        return $this->userRepository->findOneBy(['email' => $credentials['email']]);
+        /** @var UserRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+        return $userRepository->findOneBy(['email' => $credentials['email']]);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -88,26 +92,26 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
         TokenInterface $token,
         $providerKey
     ): Response {
-        $redirect = $request->query->get('redirect');
-        $redirectUrl = filter_var($redirect, FILTER_SANITIZE_URL);
-
-        if ($redirectUrl === false) {
-            throw (new AppTokenException(Response::HTTP_BAD_REQUEST, 'There was an error with the provided redirect URL'))
-                ->setErrors(['Redirect URL was invalid', $redirect]);
-        }
-
+        /** @var User */
         $user = $token->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new Exception('Expected `UserInterface`, found a string');
+
+        if (!$user instanceof User) {
+            throw new Exception('User not available');
         }
 
-        $tokenName = parse_url($redirectUrl, PHP_URL_HOST);
-        $tokenAuthority = new TokenAuthority($this->entityManager);
-        $tokenEntity = $tokenAuthority->createToken($user, $tokenName, null);
+        /** @var RefreshTokenRepository */
+        $refreshTokenRepo = $this->entityManager->getRepository(RefreshToken::class);
+        $refreshToken = $refreshTokenRepo->createToken($user);
 
-        $request->getSession()->set(TokenAuthority::SESSION_OAUTH_APP_TOKEN, $tokenEntity->getAuthorizationToken());
+        if ($request->hasSession()) {
+            $request->getSession()->invalidate();
+        }
 
-        return new RedirectResponse($this->router->generate('account.oauth.login.success'));
+        return new JsonResponse([
+            'token' => $refreshToken->getToken(),
+            'expiration' => ($refreshToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
+            'uri' => $this->router->generate('oauth.token.refresh', [], RouterInterface::ABSOLUTE_URL),
+        ]);
     }
 
     protected function getLoginUrl(): string

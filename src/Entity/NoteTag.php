@@ -6,6 +6,7 @@ use App\Repository\NoteTagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=NoteTagRepository::class)
@@ -21,8 +22,9 @@ class NoteTag
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("main")
      */
-    private string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="noteTags")
@@ -57,12 +59,12 @@ class NoteTag
         return $this;
     }
 
-    public function getUserId(): User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUserId(User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6d8521a3f7700ceca5099ff3a6c79a55",
+    "content-hash": "20fcff0ddd82ca6d4b589c3e9467d065",
     "packages": [
         {
             "name": "brick/math",
@@ -2220,21 +2220,20 @@
         },
         {
             "name": "shmolf/noted-hydrator",
-            "version": "v1.0.1",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shmolf/noted-hydrator.git",
-                "reference": "0a051312c93a296878d705123754c11824995640"
+                "reference": "dd707a5f415dc1e70c4d821869cd3758e33a2ba1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shmolf/noted-hydrator/zipball/0a051312c93a296878d705123754c11824995640",
-                "reference": "0a051312c93a296878d705123754c11824995640",
+                "url": "https://api.github.com/repos/shmolf/noted-hydrator/zipball/dd707a5f415dc1e70c4d821869cd3758e33a2ba1",
+                "reference": "dd707a5f415dc1e70c4d821869cd3758e33a2ba1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4",
-                "ramsey/uuid": "^4.1",
                 "swaggest/json-schema": "^0.12.31"
             },
             "require-dev": {
@@ -2268,9 +2267,9 @@
             ],
             "support": {
                 "issues": "https://github.com/shmolf/noted-hydrator/issues",
-                "source": "https://github.com/shmolf/noted-hydrator/tree/v1.0.1"
+                "source": "https://github.com/shmolf/noted-hydrator/tree/v2.0.0"
             },
-            "time": "2021-05-05T03:21:27+00:00"
+            "time": "2021-07-03T22:07:11+00:00"
         },
         {
             "name": "swaggest/json-diff",

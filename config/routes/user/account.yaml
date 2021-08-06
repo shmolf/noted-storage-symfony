@@ -17,7 +17,3 @@ account.edit.save:
   path: /edit
   controller: App\Controller\User\AccountController::save
   methods: POST
-
-account:
-  resource: 'oauth.yaml'
-  prefix: /oauth

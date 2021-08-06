@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "8b6ebd77-0844-4074-831e-5385815335ee",
+		"name": "Markdown Notes",
+		"description": "To use the collection, please setup the following Environment variables\n- `HOST`: references your server's URL. example `localhost`.\n- `X-AUTH-TOKEN`: references an app token that you'd generate using a browser and connecting to the host.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+							"pm.test(\r",
+							"    \"There's at least two notes\",\r",
+							"    () => pm.expect(pm.response.json().length).to.gte(2)\r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host = pm.environment.get('HOST');\r",
+							"const auth = pm.environment.get('X-AUTH-TOKEN');\r",
+							"\r",
+							"function CreateNote() {\r",
+							"    return new Promise((resolve) => {\r",
+							"        pm.sendRequest({\r",
+							"            url: `${host}/🔌/v1/note/new`,\r",
+							"            method: 'POST',\r",
+							"            header: `X-AUTH-TOKEN:${auth}`,\r",
+							"        }, (err, response) => resolve(response));\r",
+							"    })\r",
+							"}\r",
+							"\r",
+							"CreateNote().then(CreateNote());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/🔌/v1/note/list",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"🔌",
+						"v1",
+						"note",
+						"list"
+					]
+				},
+				"description": "Fetches a list of all the Notes associated with the user who owns the Access Token."
+			},
+			"response": []
+		},
+		{
+			"name": "New Note",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+							"\r",
+							"const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/;\r",
+							"pm.test(\r",
+							"    \"New Note has a UUID\",\r",
+							"    () => pm.expect(uuidRegex.test(pm.response.json().uuid)).to.eql(true)\r",
+							");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/🔌/v1/note/new",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"🔌",
+						"v1",
+						"note",
+						"new"
+					]
+				},
+				"description": "Generates a new, empty note."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Note - By Uuid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host = pm.environment.get('HOST');\r",
+							"const auth = pm.environment.get('X-AUTH-TOKEN');\r",
+							"pm.sendRequest({\r",
+							"    url: `${host}/🔌/v1/note/new`,\r",
+							"    method: 'POST',\r",
+							"    header: `X-AUTH-TOKEN:${auth}`,\r",
+							"}, (err, response) => pm.collectionVariables.set('NoteUuid', response.json().uuid));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+							"console.log(pm.collectionVariables.get('NoteUuid'));\r",
+							"pm.test(\r",
+							"    \"Retrieved Note has same UUID\",\r",
+							"    () => pm.expect(pm.response.json().uuid).to.eql(pm.collectionVariables.get('NoteUuid'))\r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/🔌/v1/note/uuid/{{NoteUuid}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"🔌",
+						"v1",
+						"note",
+						"uuid",
+						"{{NoteUuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Note - By Uuid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host = pm.environment.get('HOST');\r",
+							"const auth = pm.environment.get('X-AUTH-TOKEN');\r",
+							"pm.sendRequest({\r",
+							"    url: `${host}/🔌/v1/note/new`,\r",
+							"    method: 'POST',\r",
+							"    header: `X-AUTH-TOKEN:${auth}`,\r",
+							"}, (err, response) => pm.collectionVariables.set('NoteUuid', response.json().uuid));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}/🔌/v1/note/uuid/{{NoteUuid}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"🔌",
+						"v1",
+						"note",
+						"uuid",
+						"{{NoteUuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Note - By Uuid",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const host = pm.environment.get('HOST');\r",
+							"const auth = pm.environment.get('X-AUTH-TOKEN');\r",
+							"pm.sendRequest({\r",
+							"    url: `${host}/🔌/v1/note/new`,\r",
+							"    method: 'POST',\r",
+							"    header: `X-AUTH-TOKEN:${auth}`,\r",
+							"}, (err, response) => pm.collectionVariables.set('NoteUuid', response.json().uuid));"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));\r",
+							"\r",
+							"pm.test(\r",
+							"    \"Successfully Updated the Note\",\r",
+							"    () => {\r",
+							"        pm.expect(pm.response.json().title).to.eql('☕ is tastey');\r",
+							"        pm.expect(pm.response.json().content).to.eql('No, for realz, it makes me 🤯');\r",
+							"    }\r",
+							");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"☕ is tastey\",\r\n    \"content\": \"No, for realz, it makes me 🤯\",\r\n    \"tags\": [\r\n        \"coffee\",\r\n        \"good life\"\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{HOST}}/🔌/v1/note/uuid/{{NoteUuid}}",
+					"host": [
+						"{{HOST}}"
+					],
+					"path": [
+						"🔌",
+						"v1",
+						"note",
+						"uuid",
+						"{{NoteUuid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{X-AUTH-TOKEN}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-AUTH-TOKEN",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
