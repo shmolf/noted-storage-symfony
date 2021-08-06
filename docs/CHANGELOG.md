@@ -1,3 +1,10 @@
+### [3.0.2](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.1...v3.0.2) (2021-08-06)
+
+
+### Bug Fixes
+
+* **note:** new notes need empty strings for content and title ([8b52651](https://github.com/shmolf/noted-storage-symfony/commit/8b52651b1f471448f78318a38b15965d360158b1))
+
 ### [3.0.1](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.0...v3.0.1) (2021-08-06)
 
 
