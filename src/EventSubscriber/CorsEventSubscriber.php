@@ -48,7 +48,6 @@ class CorsEventSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $method  = $request->getRealMethod();
         if ('OPTIONS' == $method) {
-            $this->logger->debug(__LINE__);
             $response = new Response();
             $event->setResponse($response);
         }
@@ -58,8 +57,6 @@ class CorsEventSubscriber implements EventSubscriberInterface
         if (!$event->isMasterRequest()) {
             return;
         }
-        $this->logger->debug(__LINE__);
-        $this->logger->debug($this->moonSilkSack->get('noted.uri'));
 
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin', $this->moonSilkSack->get('noted.uri'));
