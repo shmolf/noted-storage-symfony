@@ -1,3 +1,10 @@
+### [3.0.1](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.0...v3.0.1) (2021-08-06)
+
+
+### Bug Fixes
+
+* **apache:** needed apache dependency ([7a793e9](https://github.com/shmolf/noted-storage-symfony/commit/7a793e9861438e41ce4805c7a8fa7f5e95d68960))
+
 ## [3.0.0](https://github.com/shmolf/noted-storage-symfony/compare/v2.0.0...v3.0.0) (2021-08-06)
 
 
