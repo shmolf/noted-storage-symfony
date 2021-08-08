@@ -60,7 +60,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
 
         $response = $event->getResponse();
         $response->headers->set('Access-Control-Allow-Origin', $this->moonSilkSack->get('noted.uri'));
-        $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT');
+        $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
         $response->headers->set('Access-Control-Allow-Headers', join(', ', self::ALLOWED_HEADERS));
     }
 }
