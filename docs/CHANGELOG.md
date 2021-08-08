@@ -1,3 +1,10 @@
+### [3.0.3](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.2...v3.0.3) (2021-08-08)
+
+
+### Bug Fixes
+
+* **cors:** add 'delete' to allowable headers ([c3f9710](https://github.com/shmolf/noted-storage-symfony/commit/c3f9710f92314b4d030fb529b71af30346683fcd))
+
 ### [3.0.2](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.1...v3.0.2) (2021-08-06)
 
 
