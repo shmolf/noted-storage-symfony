@@ -41,17 +41,21 @@ services:
     links:
       - database
 
-  node:
-    container_name: noted-storage-node
-    build:
-      context: ./docker/node
-      dockerfile: Dockerfile
-    image: shmolf/node:latest
+  x-node: &node-default
+    image: node:lts-alpine3.15
     volumes:
       - ${APP_PATH}:${DOCUMENT_ROOT}
     working_dir: ${DOCUMENT_ROOT}
     environment:
       - NODE_ENV=${NODE_ENV}
+    entrypoint:
+      - yarn
+    command:
+      - dev
+
+  node:
+    <<: *node-default
+    container_name: noted-storage-node
 
   database:
     container_name: noted-storage-database
