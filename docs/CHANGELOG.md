@@ -1,3 +1,10 @@
+## [3.1.0](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.3...v3.1.0) (2022-05-01)
+
+
+### Features
+
+* **flex:** update symfony flex dependency ([53ce190](https://github.com/shmolf/noted-storage-symfony/commit/53ce1908984c7238ec609cba95fc674ab236fd05))
+
 ### [3.0.3](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.2...v3.0.3) (2021-08-08)
 
 
