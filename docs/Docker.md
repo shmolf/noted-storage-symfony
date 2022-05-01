@@ -44,3 +44,6 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
    -out ./docker/nginx/config/self-sign-cert.crt \
    -subj "/C=US/ST=Florida/L=Pensacola/O=IAmATeapot/OU=ShortAndStout/CN=localhost"
 ```
+
+**Note**: If trying to create an SSL Certificate on a Windows box, you'll need to preface the command with
+`MSYS_NO_PATHCONV=1`. ([Reference](https://github.com/openssl/openssl/issues/8795#issuecomment-484946228))
