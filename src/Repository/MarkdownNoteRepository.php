@@ -7,6 +7,7 @@ use App\Entity\NoteTag;
 use App\Entity\User;
 use App\Exception\EntitySaveException;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -71,7 +72,7 @@ class MarkdownNoteRepository extends ServiceEntityRepository
         $noteEntity->setContent('');
         $noteEntity->setTitle('');
 
-        $now = new DateTime();
+        $now = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
         $noteEntity->setLastModified($now);
         $noteEntity->setCreatedDate($now);
 
@@ -95,7 +96,7 @@ class MarkdownNoteRepository extends ServiceEntityRepository
             throw new EntitySaveException(Response::HTTP_NOT_FOUND);
         }
 
-        $now = new DateTime();
+        $now = (new DateTime())->setTimezone(new DateTimeZone('UTC'));
 
         $noteEntity->setUser($user)
             ->setTitle($noteData->title)

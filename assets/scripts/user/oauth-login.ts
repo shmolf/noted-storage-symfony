@@ -80,11 +80,13 @@ function verifyCreds() {
   return new Promise((resolve, reject) => {
     const email = (document.getElementById('email') as HTMLInputElement).value;
     const password = (document.getElementById('password') as HTMLInputElement).value;
+    const externalHost = (new window.URLSearchParams()).get('callsite') ?? '';
     const _csrf_token = (document.getElementById('_csrf_token') as HTMLInputElement).value;
 
     const formData = new FormData();
     formData.set('email', email);
     formData.set('password', password);
+    formData.set('externalHost', externalHost);
     formData.set('_csrf_token', _csrf_token);
 
     axios({

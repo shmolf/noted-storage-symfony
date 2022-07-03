@@ -13,6 +13,7 @@ use App\Repository\RefreshTokenRepository;
 use App\TokenAuthority\AppTokenAuthority;
 use App\TokenAuthority\RefreshTokenAuthority;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,6 +96,9 @@ class OAuthController extends AbstractController
             throw new HttpException(Response::HTTP_FORBIDDEN, "Provided refresh token is either expired or invalid.");
         }
 
+        $tokenRepo = null;
+        $refreshUri = null;
+
         switch($tokenType) {
             case 'refreshToken':
                 /** @var RefreshTokenRepository */
@@ -113,11 +117,15 @@ class OAuthController extends AbstractController
                 throw new HttpException(Response::HTTP_NOT_FOUND, "Grant Type ({$tokenType}) is not supported.");
         }
 
-        $newToken = $tokenRepo->createToken($curRefreshToken->getUser());
+        $originalTokenHost = $curRefreshToken->getHost();
+        $originalTokenuser = $curRefreshToken->getUser();
+        $newToken = $tokenRepo->createToken($originalTokenuser, $originalTokenHost);
+        $expiration = ($newToken->getExpirationDate() ?? new DateTime('now', new DateTimeZone('UTC')))
+            ->format('Y-m-d H:i:s');
 
         return new JsonResponse([
             'token' => $newToken->getToken(),
-            'expiration' => ($newToken->getExpirationDate() ?? new DateTime())->format('Y-m-d H:i:s'),
+            'expiration' => $expiration,
             'uri' => $refreshUri,
         ]);
     }

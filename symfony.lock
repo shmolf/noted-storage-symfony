@@ -11,6 +11,9 @@
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
     },
+    "composer/pcre": {
+        "version": "3.0.0"
+    },
     "composer/semver": {
         "version": "3.2.5"
     },
@@ -111,12 +114,6 @@
     },
     "laminas/laminas-code": {
         "version": "4.3.0"
-    },
-    "laminas/laminas-eventmanager": {
-        "version": "3.3.1"
-    },
-    "laminas/laminas-zendframework-bridge": {
-        "version": "1.2.0"
     },
     "monolog/monolog": {
         "version": "1.26.1"
@@ -385,9 +382,6 @@
     "symfony/http-kernel": {
         "version": "v4.4.24"
     },
-    "symfony/inflector": {
-        "version": "v4.4.23"
-    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -396,9 +390,6 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
-    },
-    "symfony/mime": {
-        "version": "v4.4.24"
     },
     "symfony/monolog-bridge": {
         "version": "v4.4.25"
@@ -418,11 +409,8 @@
             "config/packages/test/monolog.yaml"
         ]
     },
-    "symfony/orm-pack": {
-        "version": "v2.1.0"
-    },
-    "symfony/polyfill-intl-idn": {
-        "version": "v1.23.0"
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.25.0"
     },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.23.0"
@@ -439,8 +427,14 @@
     "symfony/polyfill-php80": {
         "version": "v1.23.0"
     },
+    "symfony/polyfill-php81": {
+        "version": "v1.25.0"
+    },
     "symfony/property-access": {
         "version": "v4.4.20"
+    },
+    "symfony/property-info": {
+        "version": "v6.0.7"
     },
     "symfony/proxy-manager-bridge": {
         "version": "v4.4.24"
@@ -491,6 +485,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.4.20"
+    },
+    "symfony/string": {
+        "version": "v6.0.3"
     },
     "symfony/translation": {
         "version": "3.3",

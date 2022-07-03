@@ -8,6 +8,7 @@ use App\Exception\AccessTokenException;
 use App\TokenAuthority\AccessTokenAuthority;
 use App\Utility\Random;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -58,14 +59,14 @@ class AccessTokenRepository extends ServiceEntityRepository
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function createToken(?User $user): AccessToken
+    public function createToken(?User $user, ?string $host): AccessToken
     {
         if ($user === null) {
             throw new AccessTokenException(Response::HTTP_BAD_REQUEST, 'User is not set');
         }
 
         $entityManager = $this->getEntityManager();
-        $now = new DateTime();
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $expiration = clone $now;
         $expiration->modify('+' . AccessTokenAuthority::TOKEN_LIFESPAN . ' seconds');
 
@@ -73,7 +74,8 @@ class AccessTokenRepository extends ServiceEntityRepository
         $tokenEntity
             ->setExpirationDate($expiration)
             ->setCreationDate($now)
-            ->setToken(Random::createString(256, [Random::ALPHA_NUM]));
+            ->setToken(Random::createString(256, [Random::ALPHA_NUM]))
+            ->setHost($host);
 
         $user->addAccessToken($tokenEntity);
 

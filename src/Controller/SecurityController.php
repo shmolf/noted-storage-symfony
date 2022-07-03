@@ -61,8 +61,14 @@ class SecurityController extends AbstractController
             throw new Exception('User is not authenticated');
         }
 
-        $accessToken = $accessRepo->createToken($user);
-        $refreshToken = $refreshRepo->createToken($user);
+        $tokenHost = $request->request->get('host');
+
+        if ($tokenHost !== null && filter_var($tokenHost, FILTER_VALIDATE_URL) === false) {
+            throw new Exception('Invalid URI provided for the application host');
+        }
+
+        $accessToken = $accessRepo->createToken($user, $tokenHost);
+        $refreshToken = $refreshRepo->createToken($user, $tokenHost);
 
         if ($request->hasSession()) {
             $request->getSession()->invalidate();

@@ -8,6 +8,7 @@ use App\Exception\RefreshTokenException;
 use App\TokenAuthority\RefreshTokenAuthority;
 use App\Utility\Random;
 use DateTime;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -30,14 +31,14 @@ class RefreshTokenRepository extends ServiceEntityRepository
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function createToken(?User $user): RefreshToken
+    public function createToken(?User $user, ?string $host): RefreshToken
     {
         if ($user === null) {
             throw new RefreshTokenException(Response::HTTP_BAD_REQUEST, 'User is not set');
         }
 
         $entityManager = $this->getEntityManager();
-        $now = new DateTime();
+        $now = new DateTime('now', new DateTimeZone('UTC'));
         $expiration = clone $now;
         $expiration->modify('+' . RefreshTokenAuthority::TOKEN_LIFESPAN . ' seconds');
 
@@ -46,7 +47,8 @@ class RefreshTokenRepository extends ServiceEntityRepository
             ->setExpirationDate($expiration)
             ->setCreationDate($now)
             ->setToken(Random::createString(256, [Random::ALPHA_NUM]))
-            ->setIsValid(true);
+            ->setIsValid(true)
+            ->setHost($host);
 
         $user->addRefreshToken($tokenEntity);
 
