@@ -44,6 +44,11 @@ class RefreshToken implements Token
      */
     private $isValid;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $host;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +110,18 @@ class RefreshToken implements Token
     public function setIsValid(bool $isValid): self
     {
         $this->isValid = $isValid;
+
+        return $this;
+    }
+
+    public function getHost(): ?string
+    {
+        return $this->host;
+    }
+
+    public function setHost(?string $host): self
+    {
+        $this->host = $host;
 
         return $this;
     }

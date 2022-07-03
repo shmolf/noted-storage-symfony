@@ -3,10 +3,8 @@
 namespace App\Security;
 
 use App\Controller\SecurityController;
-use App\Entity\AccessToken;
 use App\Entity\RefreshToken;
 use App\Entity\User;
-use App\Repository\AccessTokenRepository;
 use App\Repository\RefreshTokenRepository;
 use App\Repository\UserRepository;
 use DateTime;
@@ -94,6 +92,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
     ): Response {
         /** @var User */
         $user = $token->getUser();
+        $referrer = $request->getSession()->get('oauth-referrer');
 
         if (!$user instanceof User) {
             throw new Exception('User not available');
@@ -101,7 +100,7 @@ class OAuthLoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
         /** @var RefreshTokenRepository */
         $refreshTokenRepo = $this->entityManager->getRepository(RefreshToken::class);
-        $refreshToken = $refreshTokenRepo->createToken($user);
+        $refreshToken = $refreshTokenRepo->createToken($user, $referrer);
 
         if ($request->hasSession()) {
             $request->getSession()->invalidate();

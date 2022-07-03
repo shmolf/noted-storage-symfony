@@ -7,8 +7,11 @@ use App\Entity\NoteTag;
 use App\Entity\User;
 use App\Repository\MarkdownNoteRepository;
 use DateTime;
+use DateTimeInterface;
+use DateTimeZone;
 use Exception;
 use Ramsey\Uuid\Uuid;
+use shmolf\NotedHydrator\JsonSchema\v2\Library;
 use shmolf\NotedHydrator\NoteHydrator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,13 +30,22 @@ class NoteController extends AbstractController
             ->findBy(['user' => $user], ['lastModified' => 'DESC']);
 
         $noteList = array_map(function(MarkdownNote $note) {
+            $createdDate = new DateTime(
+                $note->getCreatedDate()?->format(DateTimeInterface::ISO8601),
+                new DateTimeZone('UTC')
+            );
+            $lastModified = new DateTime(
+                $note->getLastModified()?->format(DateTimeInterface::ISO8601),
+                new DateTimeZone('UTC')
+            );
+
             return [
                 'title' => $note->getTitle(),
                 'tags' => array_map(fn(NoteTag $tag) => $tag->getName(), $note->getTags()->toArray()),
                 'uuid' => $note->getUuid(),
                 'inTrashcan' => $note->getInTrashcan(),
-                'createdDate' => $note->getCreatedDate(),
-                'lastModified' => $note->getLastModified(),
+                'createdDate' => $createdDate->format(DateTimeInterface::ISO8601),
+                'lastModified' => $lastModified->format(DateTimeInterface::ISO8601),
             ];
         }, $notes);
 
@@ -127,7 +139,7 @@ class NoteController extends AbstractController
             throw new Exception('Invalid UUID provided');
         }
 
-        $hydrator = new NoteHydrator();
+        $hydrator = new NoteHydrator(new Library());
         $noteJsonString = $request->getContent();
         $note = $hydrator->getHydratedNote($noteJsonString);
         if ($note === null) {

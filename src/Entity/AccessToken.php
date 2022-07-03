@@ -39,6 +39,11 @@ class AccessToken implements Token
      */
     private ?User $user = null;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $host;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +93,18 @@ class AccessToken implements Token
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getHost(): ?string
+    {
+        return $this->host;
+    }
+
+    public function setHost(?string $host): self
+    {
+        $this->host = $host;
 
         return $this;
     }

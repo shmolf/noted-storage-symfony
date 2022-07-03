@@ -19,6 +19,7 @@
     "exclude": [
         "public/build/**/*",
         "packages-cache",
-        "node_modules"
+        "node_modules",
+        "vendor"
     ]
   }

@@ -3,13 +3,8 @@
 namespace App\TokenAuthority;
 
 use App\Entity\AccessToken;
-use App\Entity\User;
-use App\Exception\AccessTokenException;
-use App\Utility\Random;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Symfony\Component\HttpFoundation\Response;
 
 class AccessTokenAuthority implements TokenAuthority
 {
