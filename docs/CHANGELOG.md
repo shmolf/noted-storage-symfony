@@ -1,3 +1,22 @@
+## [4.0.0](https://github.com/shmolf/noted-storage-symfony/compare/v3.1.0...v4.0.0) (2022-07-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* CHANGES
+- is supposed to allow a Note API to support multiple Note Rendering sites
+
+### Features
+
+* support multi-host applications ([10c975a](https://github.com/shmolf/noted-storage-symfony/commit/10c975a5e4d2500d8e82566da032de53aa1e13e8))
+
+
+### Bug Fixes
+
+* **tsconfig:** exclude the vendor dir ([d736685](https://github.com/shmolf/noted-storage-symfony/commit/d7366853850cdfc440daa29aa7e40bac33466c44))
+* **lint:** resolve some linting errors ([773f50d](https://github.com/shmolf/noted-storage-symfony/commit/773f50dd1cb9823a85e3a1884b708f2a057db68c))
+* **workflow:** update php version ([fec8773](https://github.com/shmolf/noted-storage-symfony/commit/fec87733953c40d888c8f3cfa53a91ea6eb1305b))
+
 ## [3.1.0](https://github.com/shmolf/noted-storage-symfony/compare/v3.0.3...v3.1.0) (2022-05-01)
 
 
