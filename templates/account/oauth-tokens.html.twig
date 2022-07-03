@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('oauth-token-list') }}
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('oauth-token-list') }}
+{% endblock %}
+
+{% block pageContext %}- App Tokens{% endblock %}
+
+{% block body %}
+    <div id="form-errors"></div>
+    <table class="striped highlight centered">
+        <thead>
+            <tr>
+                <th>{{ 'Host'|trans }}</th>
+                <th>{{ 'Created'|trans }}</th>
+                <th>{{ 'Expires'|trans }}</th>
+                <th>{{ 'Is Valid'|trans }}</th>
+                {# <th></th> #}
+            </tr>
+        </thead>
+        <tbody>
+        {% if tokens is empty %}
+            <tr class="token-record">
+                <td colspan="5">
+                    {{ 'You have not generated any Application Tokens yet'|trans }}
+                </td>
+            </tr>
+        {% else %}
+            {% for token in tokens %}
+                <tr class="token-record" {# <data-url="{{path('oauthToken.delete', {'uuid': token.uuid}) }}" #}>
+                    <td>{{ token.host ?? noted_uri }}</td>
+                    <td><time>{{ token.created|date('Y-m-d H:i:s') }}</time></td>
+                    {% set expiration = token.expires is not null
+                        ? token.expires|date('Y-m-d H:i:s')
+                        : 'never'
+                    %}
+                    <td><time>{{ expiration }}</time></td>
+                    <td><time>{{ token.isValid ? 'yes' : 'no' }}</time></td>
+                    {# <td><button type="button" class="btn delete">{{ 'Delete'|trans }}</button></td> #}
+                </tr>
+            {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

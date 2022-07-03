@@ -29,6 +29,10 @@ appToken:
   resource: 'routes/user/appToken.yaml'
   prefix: /appToken
 
+oauthToken:
+  resource: 'routes/user/oauthToken.yaml'
+  prefix: /refresh
+
 api:
   utf8: true
   resource: 'routes/api/routes.yaml'

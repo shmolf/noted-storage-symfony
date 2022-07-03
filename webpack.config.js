@@ -34,6 +34,7 @@ Encore
     .addEntry('oauth-success', './assets/scripts/user/oauth-success.ts')
     .addEntry('app-token-list', './assets/scripts/user/tokens.ts')
     .addEntry('new-app-token', './assets/scripts/user/new-app-token.ts')
+    .addEntry('oauth-token-list', './assets/scripts/user/oauth-tokens.ts')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     // .enableStimulusBridge('./assets/controllers.json')

@@ -1,0 +1,11 @@
+oauthToken.list:
+  path: /list
+  controller: App\Controller\User\OauthTokenController::oauthTokenList
+  methods: GET
+
+oauthToken.delete:
+  path: /app/{uuid}
+  controller: App\Controller\User\OauthTokenController::deleteOauthToken
+  methods: DELETE
+  requirements:
+    uuid: '[a-fA-F0-9\-]+'
