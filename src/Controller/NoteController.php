@@ -31,11 +31,11 @@ class NoteController extends AbstractController
 
         $noteList = array_map(function(MarkdownNote $note) {
             $createdDate = new DateTime(
-                $note->getCreatedDate()->format(DateTimeInterface::ISO8601),
+                $note->getCreatedDate()?->format(DateTimeInterface::ISO8601),
                 new DateTimeZone('UTC')
             );
             $lastModified = new DateTime(
-                $note->getLastModified()->format(DateTimeInterface::ISO8601),
+                $note->getLastModified()?->format(DateTimeInterface::ISO8601),
                 new DateTimeZone('UTC')
             );
 

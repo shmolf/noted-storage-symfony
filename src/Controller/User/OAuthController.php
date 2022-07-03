@@ -83,6 +83,9 @@ class OAuthController extends AbstractController
         return $this->redirectToRoute('oauth.login');
     }
 
+    /**
+     * @psalm-suppress UnusedVariable
+     */
     public function refreshToken(Request $request, RouterInterface $router): Response {
         /** @var EntityManagerInterface */
         $entityManager = $this->getDoctrine()->getManager();

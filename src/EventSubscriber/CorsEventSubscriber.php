@@ -76,7 +76,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
                 throw new TokenAuthenticationException();
             }
         } catch (Exception $e) {
-            $this->logger->error($e);
+            $this->logger->error($e->getMessage());
             // $this->logArray([
             //     'is Preflight Check' => $this->isPreFlightCheck($request) ? 'yes' : 'no',
             //     'request path' => $request->getPathInfo(),
@@ -103,7 +103,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
             $response->headers->set('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
             $response->headers->set('Access-Control-Allow-Headers', join(', ', self::ALLOWED_HEADERS));
         } catch(Exception $e) {
-            $this->logger->error($e);
+            $this->logger->error($e->getMessage());
         }
     }
 
@@ -133,7 +133,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
         $referrer = $request->server->get('HTTP_REFERER');
         $token = $this->getRequestToken($request);
 
-        return $token === null ? false : rtrim($token->getHost(), '/') === rtrim($referrer, '/');
+        return $token === null ? false : rtrim($token->getHost() ?? '', '/') === rtrim($referrer, '/');
     }
 
     private function getRequestToken(Request $request): RefreshToken|AccessToken|null {
@@ -143,7 +143,7 @@ class CorsEventSubscriber implements EventSubscriberInterface
         switch (true) {
             case $refreshTokenId !== null:
                 return $this->refreshTokenRepo->findOneBy(['token' => $refreshTokenId]);
-            case $refreshTokenId !== null:
+            case $accessTokenId !== null:
                 return $this->appTokenRepo->findOneBy(['token' => $accessTokenId]);
             default:
                 return null;
@@ -153,6 +153,9 @@ class CorsEventSubscriber implements EventSubscriberInterface
     /**
      * Will attempt to derive the CORS host from the token.\
      * If the token is old, and is missing a host, then it'll default to the `noted.uri` global value.
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     * @psalm-suppress UnusedVariable
+     * @psalm-suppress PossiblyInvalidArgument
      */
     private function deriveCorsHost(Request $request): string {
         $allowedHost = null;
@@ -171,7 +174,9 @@ class CorsEventSubscriber implements EventSubscriberInterface
             $allowedHost = $token?->getHost();
         }
 
-        return $allowedHost === null ? $this->moonSilkSack->get('noted.uri') : rtrim($allowedHost, '/');
+        $defaultHost = strval($this->moonSilkSack->get('noted.uri'));
+
+        return $allowedHost === null ? $defaultHost : rtrim($allowedHost, '/');
     }
 
     private function logArray($array) {
