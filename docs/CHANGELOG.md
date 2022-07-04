@@ -1,3 +1,15 @@
+## [4.1.0](https://github.com/shmolf/noted-storage-symfony/compare/v4.0.0...v4.1.0) (2022-07-04)
+
+
+### Features
+
+* list oauth tokens ([70a7d00](https://github.com/shmolf/noted-storage-symfony/commit/70a7d00f0d381ef109e1aa3f06c59527271e8c79))
+
+
+### Bug Fixes
+
+* remove unusable method ([af94141](https://github.com/shmolf/noted-storage-symfony/commit/af9414153436585191ca950023e4187c1f232a54))
+
 ## [4.0.0](https://github.com/shmolf/noted-storage-symfony/compare/v3.1.0...v4.0.0) (2022-07-03)
 
 
