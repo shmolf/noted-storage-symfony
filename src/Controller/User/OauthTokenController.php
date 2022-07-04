@@ -38,27 +38,27 @@ class OauthTokenController extends AbstractController
         ]);
     }
 
-    public function deleteOauthToken(string $uuid): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            throw new Exception('User is not logged in');
-        }
+    // public function deleteOauthToken(string $uuid): JsonResponse
+    // {
+    //     $user = $this->getUser();
+    //     if (!$user instanceof User) {
+    //         throw new Exception('User is not logged in');
+    //     }
 
-        /** @var RefreshToken|false */
-        /** @psalm-suppress UnnecessaryVarAnnotation */
-        $token = $user->getRefreshTokens()->filter(fn(RefreshToken $token) => $token->getUuid() === $uuid)->first();
+    //     /** @var RefreshToken|false */
+    //     /** @psalm-suppress UnnecessaryVarAnnotation */
+    //     $token = $user->getRefreshTokens()->filter(fn(RefreshToken $token) => $token->getUuid() === $uuid)->first();
 
-        if ($token instanceof RefreshToken) {
-            $user->removeRefreshToken($token);
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-            $entityManager->clear();
+    //     if ($token instanceof RefreshToken) {
+    //         $user->removeRefreshToken($token);
+    //         $entityManager = $this->getDoctrine()->getManager();
+    //         $entityManager->persist($user);
+    //         $entityManager->flush();
+    //         $entityManager->clear();
 
-            return new JsonResponse();
-        }
+    //         return new JsonResponse();
+    //     }
 
-        return new JsonResponse([], Response::HTTP_NOT_FOUND);
-    }
+    //     return new JsonResponse([], Response::HTTP_NOT_FOUND);
+    // }
 }
