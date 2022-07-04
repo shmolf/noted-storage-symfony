@@ -3,6 +3,7 @@
 namespace App\EventListener;
 
 use App\Exception\ErrorList;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -12,10 +13,14 @@ use Throwable;
 class ExceptionListener
 {
     private string $env;
+    private LoggerInterface $logger;
 
-    public function __construct(string $env)
-    {
+    public function __construct(
+        string $env,
+        LoggerInterface $logger,
+    ) {
         $this->env = $env;
+        $this->logger = $logger;
     }
 
     public function onKernelException(ExceptionEvent $event): void
@@ -66,6 +71,8 @@ class ExceptionListener
             <hr />
             HTML;
         }
+
+        $this->logger->error($exception->getMessage());
 
         $response->setContent(<<<HTML
         <p>Well 💩..., <i>there was an error</i>.</p>
