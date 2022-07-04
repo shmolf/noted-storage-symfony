@@ -1,3 +1,10 @@
+### [4.1.1](https://github.com/shmolf/noted-storage-symfony/compare/v4.1.0...v4.1.1) (2022-07-04)
+
+
+### Bug Fixes
+
+* oauth route & error logging ([28451e6](https://github.com/shmolf/noted-storage-symfony/commit/28451e66713f00a65b0211072f6b58411a0142c4))
+
 ## [4.1.0](https://github.com/shmolf/noted-storage-symfony/compare/v4.0.0...v4.1.0) (2022-07-04)
 
 
