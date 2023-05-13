@@ -28,7 +28,7 @@ class MarkdownNote
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=16777215)
+     * @ORM\Column(type="string", length=16777215, nullable=true)
      * @Groups("main")
      */
     private ?string $content = null;
