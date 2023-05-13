@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MarkdownNoteRepository::class)
+ * @ORM\Table(options={"collate"="utf8mb4_unicode_ci", "charset"="utf8mb4"})
  * @UniqueEntity(
  *      fields={"user_id","uuid"},
  *      message="Each user will have a their own set of unique uuids."
@@ -27,7 +28,7 @@ class MarkdownNote
     private int $id;
 
     /**
-     * @ORM\Column(type="string", length=16777215, nullable=true)
+     * @ORM\Column(type="string", length=16777215)
      * @Groups("main")
      */
     private ?string $content = null;

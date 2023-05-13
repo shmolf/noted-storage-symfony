@@ -63,11 +63,11 @@ services:
     restart: always
     # https://dev.mysql.com/doc/mysql-linuxunix-excerpt/8.0/en/docker-mysql-more-topics.html
     command: [
-      '--default-authentication-plugin=mysql_native_password',
-      '--character-set-server=utf8mb4'
+      '--default-authentication-plugin=mysql_native_password'
     ]
     volumes:
       - noted-storage-app:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/config-file.cnf
     hostname: mysql-container
     ports:
       - "${DB_PORT}:3306"
