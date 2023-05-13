@@ -41,7 +41,7 @@ services:
     links:
       - database
 
-  x-node: &node-default
+  node-template: &node-default
     image: node:lts-alpine3.15
     volumes:
       - ${APP_PATH}:${DOCUMENT_ROOT}

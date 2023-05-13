@@ -16,6 +16,9 @@ docker-compose --env-file docker.env.local config
 ```
 
 # Build the Images
+Before building the image, be sure to update the `NOTED_HOST` value in your `docker.env.local` file, to point to the
+host where you'll be pulling notes from.
+
 **To run the entire setup**
 - Make sure you've created a `docker.env.local` file, which'd be based on `docker.env`.
 ```bash
