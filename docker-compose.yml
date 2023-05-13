@@ -41,7 +41,7 @@ services:
     links:
       - database
 
-  x-node: &node-default
+  node-template: &node-default
     image: node:lts-alpine3.15
     volumes:
       - ${APP_PATH}:${DOCUMENT_ROOT}
@@ -68,6 +68,7 @@ services:
     ]
     volumes:
       - noted-storage-app:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/config-file.cnf
     hostname: mysql-container
     ports:
       - "${DB_PORT}:3306"

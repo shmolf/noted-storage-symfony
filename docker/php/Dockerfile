@@ -1,6 +1,9 @@
-FROM php:7.4-fpm
+FROM php:8.1-fpm
 
 LABEL maintainer='shmolf@gmail.com'
+
+ARG container_user=newuser
+ARG container_uid=1000
 
 # Add international support
 RUN apt-get update && apt-get install -y zlib1g-dev libicu-dev g++ git unzip
@@ -22,6 +25,9 @@ RUN docker-php-ext-enable mysqli pdo pdo_mysql
 COPY --from=composer:2.1.3 /usr/bin/composer /usr/bin/composer
 
 EXPOSE 9000
+
+RUN useradd -u $container_uid $container_user
+USER $container_user
 CMD composer install \
     && bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration \
     && php-fpm
